@@ -1,0 +1,130 @@
+<launch>
+  
+  <!-- A launch file to independently (re-)launch the point head action for debugging -->
+  
+<!--  <include file="$(find pr2_machine)/pr2.machine" />
+-->
+
+	<include file="$(find 3dof_tm_moveit_config)/launch/planning_context.launch">
+    	<arg name="load_robot_description" value="true"/>
+  	</include>
+
+
+	<node name="tm_manager" 
+          pkg="beginner_tutorials" type="tm_manager" output="screen" >
+	
+    </node>
+
+	<node name="controller" 
+          pkg="beginner_tutorials" type="Controller" output="screen" >
+	
+	<rosparam param="fMass">[0.0186, 0.0004, 0, -0.0005, 0.0481, 0, -0.0008, 0.0033, 0]</rosparam>
+
+	<rosparam param="fDC">[0.1883, -0.0179, 0.3012]</rosparam>
+	  	
+		<rosparam command="load"
+              file="$(find 3dof_tm_moveit_config)/config/kinematics.yaml"/>
+    </node>
+
+    <node name="joint_1" 
+          pkg="beginner_tutorials" type="joint_driver" output="screen" respawn="true">
+
+      <param name=  "port_name" type="string" value="/dev/ttyS1" />
+      <param name=  "q_offset" type="double" value="-0.44" />
+      <param name=  "q_sign" type="int" value="-1" />
+      <param name=  "qei_max_cnt" type="double" value="14399" />
+      
+      <param name=  "kp_pos" type="double" value="40" />
+      <param name=  "ki_pos" type="double" value="20" />
+      <param name=  "kd_pos" type="double" value="0" />
+      <param name=  "sat_pos" type="double" value="10" />
+      <param name=  "isat_pos" type="double" value="10" />
+      
+      <param name=  "kp_speed" type="double" value="10" />
+      <param name=  "ki_speed" type="double" value="50" />
+      <param name=  "kd_speed" type="double" value="0" />
+      <param name=  "sat_speed" type="double" value="10" />
+      <param name=  "isat_speed" type="double" value="10" />
+      
+      <param name=  "kVW" type="double" value="0.098" />
+      <param name=  "kVT" type="double" value="1.6315" />
+      
+      <param name=  "dbPos" type="double" value="3.5" />
+      <param name=  "dbNeg" type="double" value="1.4" />
+      <param name=  "slopePos" type="double" value="1.0" />
+      <param name=  "slopeNeg" type="double" value="1.0" />
+      
+    </node>
+
+    <node name="joint_2" 
+          pkg="beginner_tutorials" type="joint_driver" output="screen" respawn="true">
+
+      <param name= "port_name" type="string" value="/dev/ttyS0" />
+	  <param name=  "q_offset" type="double" value="-1.63" /> <!--0.08-->
+	  <param name=  "q_sign" type="int" value="-1" />
+	  <param name=  "qei_max_cnt" type="double" value="9999" />
+	
+	  <param name=  "kp_pos" type="double" value="60" />
+      <param name=  "ki_pos" type="double" value="100" />
+      <param name=  "kd_pos" type="double" value="0" />
+      <param name=  "sat_pos" type="double" value="10" />
+      <param name=  "isat_pos" type="double" value="10" />
+      
+      <param name=  "kp_speed" type="double" value="10" />
+      <param name=  "ki_speed" type="double" value="50" />
+      <param name=  "kd_speed" type="double" value="0" />
+      <param name=  "sat_speed" type="double" value="10" />
+      <param name=  "isat_speed" type="double" value="10" />
+      
+      <param name=  "kVW" type="double" value="0.0987" />
+      <param name=  "kVT" type="double" value="1.3692" />
+	
+	  <param name=  "dbPos" type="double" value="3.1" />
+      <param name=  "dbNeg" type="double" value="1.4" />
+      <param name=  "slopePos" type="double" value="1.0" />
+      <param name=  "slopeNeg" type="double" value="1.0" />
+	
+    </node>   
+
+	<node name="joint_3" 
+          pkg="beginner_tutorials" type="joint_driver" output="screen" respawn="true">
+
+      <param name=  "port_name" type="string" value="/dev/ttyS3" />
+      <param name=  "q_offset" type="double" value="0.05" />
+      <param name=  "q_sign" type="int" value="1" />
+      <param name=  "qei_max_cnt" type="double" value="10000" />
+    
+      <param name=  "kp_pos" type="double" value="90" />
+      <param name=  "ki_pos" type="double" value="160" />
+      <param name=  "kd_pos" type="double" value="0" />
+      <param name=  "sat_pos" type="double" value="10" />
+      <param name=  "isat_pos" type="double" value="10" />
+      
+      <param name=  "kp_speed" type="double" value="10" />
+      <param name=  "ki_speed" type="double" value="50" />
+      <param name=  "kd_speed" type="double" value="0" />
+      <param name=  "sat_speed" type="double" value="10" />
+      <param name=  "isat_speed" type="double" value="10" />
+    
+      <param name=  "kVW" type="double" value="0.0999" />
+      <param name=  "kVT" type="double" value="1.7973" />
+      
+      <param name=  "dbPos" type="double" value="1.5" />
+      <param name=  "dbNeg" type="double" value="3.2" />
+      <param name=  "slopePos" type="double" value="1.0" />
+      <param name=  "slopeNeg" type="double" value="1.0" />
+    
+    </node>
+
+	<node name="force_sensor" 
+          pkg="beginner_tutorials" type="force_sensor" output="screen">
+          <param name=  "dbForce" type="double" value="0" />
+    
+    </node>
+    
+    <node name="joint_tray_interp" 
+          pkg="beginner_tutorials" type="joint_tray_interp" output="screen">
+    
+    </node>
+	
+</launch>

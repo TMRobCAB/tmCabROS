@@ -1,0 +1,176 @@
+#include "incfiles.h"
+#include "adq.h"
+#include "signal.h"
+#include "sched.h"
+#include "Logger.h"
+#include "CtlPID.h"
+#include "SpeedModel.h"
+
+// Parámetros de loggeo
+#define LOG_LENGTH 1e6
+#define LOG_VARS_NUM 7
+
+// Frecuencia de muestreo del sistema
+#define SYS_FS 100
+
+// Parámetros de la señal PWM
+#define PWM_MAX 24
+#define PWM_MIN 2.8
+
+// Constantes de transducción
+#define FORCE_K 0.0098
+#define UF_K -2.043
+#define UW_K 0.0719
+
+// Parámetros de medios conmutados
+#define B_LIMIT (M_PI/6)
+#define B_LIGHT 0.01
+#define B_HEAVY 0.01
+#define K_HEAVY 0.05
+
+
+//#define B_HEAVY 0.01
+//#define K_HEAVY 0.05
+
+bool running = true;
+
+void SigExit(int arg) {
+	running = false;
+}
+
+double dift(struct timespec *tv1, struct timespec *tv2) {
+
+	return (tv1->tv_sec - tv2->tv_sec) + (tv1->tv_nsec - tv2->tv_nsec) / 1.0e9;
+
+}
+
+int GoRealTime() {	// Cambia la prioridad del proceso
+	struct sched_param sp;
+	sp.sched_priority = 50;
+
+	if (sched_setscheduler(0, SCHED_FIFO, &sp) != 0)
+		return -1;
+
+	return 0;
+}
+
+int SetTerminalNBlock() {
+	if (fcntl(STDIN_FILENO, F_SETFL, O_NONBLOCK) < 0) {	//	Setea la consola en NON Blocking
+		printf("\nMain: No puedo setear consola non-blocking\n");
+		return -1;
+	}
+	return 0;
+}
+
+int main() {
+
+	timespec ti, tn;
+	double t0 = 0, t = 0;
+
+	ADQ adq;
+
+	double sysState[LOG_VARS_NUM];
+	Logger logModule(LOG_LENGTH, LOG_VARS_NUM, sysState);
+
+	CtlPID SpeedCorr(2.5, 100, 0, SYS_FS, 0, PWM_MAX);
+	float UCtl = 0, speedError = 0;	//, posError = 0;
+
+	//Durito
+	//SpeedModel speedModel(0.005,0.08,0.05,SYS_FS);
+
+	//Op Libre
+	SpeedModel speedModel(0.008, 0.03, 0.005, SYS_FS);
+
+	//Op Libre
+	//RefModel rModel(0.9,9,3,SYS_FS);
+
+	if (GoRealTime() < 0)
+		printf("Real-Time permissions not granted \n");
+	else
+		printf("Real-Time permissions granted \n");
+
+	SetTerminalNBlock();
+
+	signal(SIGINT, &SigExit);
+
+	clock_gettime(CLOCK_MONOTONIC, &ti);
+
+	if (!adq.Init("/dev/ttyACM0")) {
+		printf("\nError abriendo interface USB \n");
+		return 0;
+	}
+
+	adq.ComStart();
+
+	if (adq.AquireForceZero() < 0)
+		return -1;
+
+	while (running) {
+
+		if (!adq.io())
+			continue;
+
+		clock_gettime(CLOCK_MONOTONIC, &tn);
+		t = dift(&tn, &ti);
+
+		if (fabs(adq.GetPosRad()) <= B_LIMIT) {
+			speedModel.setBr(B_LIGHT);
+			speedModel.setKr(0.0);
+			speedModel.ComputeModel(adq.GetForce() * FORCE_K, adq.GetPosRad(),
+					adq.GetSpeedRadSec());
+		} else {
+			speedModel.setBr(B_HEAVY);
+			speedModel.setKr(K_HEAVY);
+			speedModel.ComputeModel(adq.GetForce() * FORCE_K,
+					adq.GetPosRad() - sgn(adq.GetPosRad()) * B_LIMIT,
+					adq.GetSpeedRadSec());
+		}
+		//speedModel.ComputeModel(adq.GetForce()*FORCE_K,adq.GetPosRad(),adq.GetSpeedRadSec());
+
+		//posError = speedModel.getPosr() + speedModel.getSpeedr() * T_LC * 0.6 - adq.GetPosRad();
+
+		speedError = speedModel.getSpeedr() - adq.GetSpeedRadSec();
+
+//		if(fabs(posError) < ERR_TOLERENCE)
+//			posError = 0;
+
+		UCtl = speedModel.getSpeedr() / UW_K + adq.GetForce() * FORCE_K / UF_K
+				+ SpeedCorr.ComputeCtl(speedError);
+
+		UCtl += sgn(UCtl) * PWM_MIN;
+
+		if (fabs(UCtl) > PWM_MAX)
+			UCtl = sgn(UCtl) * PWM_MAX * 0.95;
+
+		adq.SetRefPWM(UCtl);
+
+		sysState[0] = t;
+		sysState[1] = adq.GetForce();
+		sysState[2] = adq.GetPosRad();
+		sysState[3] = adq.GetSpeedRadSec();
+		sysState[4] = speedModel.getSpeedr();
+		sysState[5] = adq.getRefPwm();
+		sysState[6] = SpeedCorr.getUCtl();
+
+		logModule.WriteNewItem();
+
+		if (t - t0 > 0.1) {
+			t0 = t;
+			printf(
+					"\r Force[cnts]: %4.3f; Position[rad]: %3.3f; Speed[rad/s]: %3.3f; refPos: %f; err:%d",
+					adq.GetForce(), adq.GetPosRad(), adq.GetSpeedRadSec(),
+					speedModel.getAccValOld(), adq.getChkErr());
+
+			fflush_unlocked((FILE *) stdout);
+		}
+
+		usleep(100);
+	}
+
+	adq.ComStop();
+
+	logModule.SaveLog("log.csv");
+
+	printf("\nClosing Interface\n");
+
+}

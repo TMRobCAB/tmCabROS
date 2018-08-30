@@ -1,0 +1,17 @@
+uint8 ARC_TG=0
+uint8 LIN=1
+uint8 intType
+
+uint8 SPEED=2
+uint8 PWM=3
+uint8 POS=4
+uint8 varId
+
+uint8 jntNum
+float32 dPos
+float32 duration
+float32 accT
+
+uint8 nSteps
+---
+bool ack

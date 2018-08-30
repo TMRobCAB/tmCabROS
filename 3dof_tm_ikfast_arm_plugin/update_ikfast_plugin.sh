@@ -1,0 +1,1 @@
+rosrun moveit_ikfast create_ikfast_moveit_plugin.py 3dof_tm arm 3dof_tm_ikfast_arm_plugin /home/l_vis/catkin_ws/src/3dof_tm_ikfast_arm_plugin/src/3dof_tm_arm_ikfast_solver.cpp

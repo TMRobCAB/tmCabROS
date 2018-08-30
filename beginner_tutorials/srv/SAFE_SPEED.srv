@@ -1,0 +1,4 @@
+float32 maxS
+float32 minS
+---
+bool ack

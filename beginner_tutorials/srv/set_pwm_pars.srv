@@ -1,0 +1,6 @@
+float32 deadBandPos
+float32 deadBandNeg
+float32 slopePos
+float32 slopeNeg
+---
+bool ack

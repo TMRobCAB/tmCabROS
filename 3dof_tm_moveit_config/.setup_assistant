@@ -1,0 +1,8 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: ""
+    relative_path: /home/l_vis/catkin_ws/URDFs/3dofTM.urdf
+  SRDF:
+    relative_path: config/3dof_tm.srdf
+  CONFIG:
+    generated_timestamp: 1463785714

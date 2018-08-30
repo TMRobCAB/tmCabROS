@@ -1,0 +1,17 @@
+uint8 BREAK_PID=0
+uint8 POS_PID=1
+uint8 SPEED_PID=2
+uint8 FORCE_PID=3
+uint8 IDX_PID=4
+uint8 pid_id
+
+uint8 KP=0
+uint8 KI=1
+uint8 KD=2
+uint8 ISAT=3
+uint8 SAT=4
+uint8 par_id
+float32 value
+
+---
+bool ack

@@ -1,0 +1,6 @@
+controller_list:
+  - name: fake_arm_controller
+    joints:
+      - mount_to_trunk
+      - trunk_to_arm
+      - arm_to_forearm

@@ -1,0 +1,7 @@
+uint8 FLIN=0
+uint8 FARC=1
+uint8 id
+float32 time_change
+
+---
+bool ack

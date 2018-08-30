@@ -1,0 +1,2219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TmOperationWidget</class>
+ <widget class="QWidget" name="TmOperationWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>751</width>
+    <height>582</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>TM Operation</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="Resources/tm_gui_res.qrc">
+    <normaloff>:/tm_gui/TelmanCabIbLogo.png</normaloff>:/tm_gui/TelmanCabIbLogo.png</iconset>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
+     <widget class="QWidget" name="pars_tab">
+      <attribute name="icon">
+       <iconset resource="Resources/tm_gui_res.qrc">
+        <normaloff>:/tm_gui/Tool Properties.png</normaloff>:/tm_gui/Tool Properties.png</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>TM Parameters</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="1" column="2">
+        <spacer name="horizontalSpacer_10">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="3">
+        <widget class="QGroupBox" name="j_cfg_groupBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="cursor">
+          <cursorShape>ArrowCursor</cursorShape>
+         </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">
+
+QGroupBox {
+    border: 1px solid gray;
+    border-radius: 9px;
+    margin-top: 0.5em;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 10px;
+    padding: 0 3px 0 3px;
+}
+
+</string>
+         </property>
+         <property name="title">
+          <string>Joint Config</string>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_j_sel">
+            <item>
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>Apply to: </string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="j_sel_comboBox">
+              <item>
+               <property name="text">
+                <string>All</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Joint 1</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Joint 2</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Joint 3</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="ack_Safe_pushButton">
+              <property name="text">
+               <string>Ack Safety</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QGridLayout" name="j_pars_gridLayout">
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>Set Safety Pars</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QPushButton" name="set_safe_par_pushButton">
+              <property name="text">
+               <string>Set Parameter</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="2">
+             <widget class="QPushButton" name="set_ctl_par_pushButton">
+              <property name="text">
+               <string>Set Parameter</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="4">
+             <layout class="QHBoxLayout" name="idx_but_horizontalLayout">
+              <item>
+               <widget class="QPushButton" name="p_idx_ref_pushButton">
+                <property name="text">
+                 <string>&lt;&lt; +</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QPushButton" name="n_idx_ref_pushButton">
+                <property name="text">
+                 <string>- &gt;&gt;</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="3" column="0">
+             <layout class="QGridLayout" name="safe_pars_gridLayout">
+              <item row="3" column="0">
+               <widget class="QPlainTextEdit" name="safe_par_min_val_plainTextEdit">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>113</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>113</width>
+                  <height>30</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <spacer name="verticalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="5" column="0">
+               <widget class="QLabel" name="label_10">
+                <property name="minimumSize">
+                 <size>
+                  <width>113</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>113</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Max Val</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="0">
+               <widget class="QPlainTextEdit" name="safe_par_max_val_plainTextEdit">
+                <property name="minimumSize">
+                 <size>
+                  <width>113</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>113</width>
+                  <height>30</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="0">
+               <spacer name="verticalSpacer_2">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_9">
+                <property name="minimumSize">
+                 <size>
+                  <width>113</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>113</width>
+                  <height>17</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Min Val</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <spacer name="verticalSpacer_17">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="0" column="0">
+               <widget class="QComboBox" name="safe_pars_comboBox">
+                <item>
+                 <property name="text">
+                  <string>Position</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Position e</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Speed</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Speed e</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>PWM</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Current</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Current e</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Force</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="1" column="2">
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>Set Control Pars</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="3">
+             <spacer name="horizontalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="2" column="1">
+             <spacer name="horizontalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="1" column="4">
+             <widget class="QLabel" name="label_7">
+              <property name="text">
+               <string>Index Joint</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="2">
+             <widget class="QStackedWidget" name="set_par_stackedWidget">
+              <property name="currentIndex">
+               <number>3</number>
+              </property>
+              <widget class="QWidget" name="pid_page">
+               <layout class="QVBoxLayout" name="verticalLayout_3">
+                <item>
+                 <spacer name="verticalSpacer_12">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_12">
+                  <property name="minimumSize">
+                   <size>
+                    <width>98</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>98</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Kp</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPlainTextEdit" name="kp_plainTextEdit">
+                  <property name="minimumSize">
+                   <size>
+                    <width>98</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>98</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="verticalSpacer_3">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_11">
+                  <property name="minimumSize">
+                   <size>
+                    <width>98</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>98</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Ki</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPlainTextEdit" name="ki_plainTextEdit">
+                  <property name="minimumSize">
+                   <size>
+                    <width>98</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>98</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="verticalSpacer_4">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_14">
+                  <property name="minimumSize">
+                   <size>
+                    <width>98</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>98</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Kd</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPlainTextEdit" name="kd_plainTextEdit">
+                  <property name="minimumSize">
+                   <size>
+                    <width>98</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>98</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="verticalSpacer_5">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_15">
+                  <property name="minimumSize">
+                   <size>
+                    <width>98</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>98</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Var Sat</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPlainTextEdit" name="sat_plainTextEdit">
+                  <property name="minimumSize">
+                   <size>
+                    <width>98</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>98</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="verticalSpacer_6">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_13">
+                  <property name="minimumSize">
+                   <size>
+                    <width>98</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>98</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>I Var Sat</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPlainTextEdit" name="isat_plainTextEdit">
+                  <property name="minimumSize">
+                   <size>
+                    <width>98</width>
+                    <height>29</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>98</width>
+                    <height>29</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="verticalSpacer_13">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="fs_page">
+               <layout class="QVBoxLayout" name="verticalLayout">
+                <item>
+                 <spacer name="verticalSpacer_7">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_16">
+                  <property name="minimumSize">
+                   <size>
+                    <width>98</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>98</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>FS [Hz]</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPlainTextEdit" name="fs_plainTextEdit">
+                  <property name="minimumSize">
+                   <size>
+                    <width>98</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>98</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="verticalSpacer_8">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="break_int_page">
+               <layout class="QVBoxLayout" name="verticalLayout_4">
+                <item>
+                 <spacer name="verticalSpacer_11">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_19">
+                  <property name="minimumSize">
+                   <size>
+                    <width>98</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>98</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>T Change</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPlainTextEdit" name="t_change_plainTextEdit">
+                  <property name="minimumSize">
+                   <size>
+                    <width>98</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>98</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="verticalSpacer_9">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>54</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_18">
+                  <property name="minimumSize">
+                   <size>
+                    <width>98</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>98</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Function</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="int_fun_comboBox">
+                  <item>
+                   <property name="text">
+                    <string>Linear</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Arc Tg</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="verticalSpacer_10">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>54</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="pwm_pars_page">
+               <layout class="QVBoxLayout" name="verticalLayout_8">
+                <item>
+                 <spacer name="verticalSpacer_31">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>11</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_17">
+                  <property name="minimumSize">
+                   <size>
+                    <width>98</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>98</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Dead Band +</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPlainTextEdit" name="db_pos_plainTextEdit">
+                  <property name="minimumSize">
+                   <size>
+                    <width>98</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>98</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="verticalSpacer_30">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>10</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_22">
+                  <property name="minimumSize">
+                   <size>
+                    <width>98</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>98</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Dead Band -</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPlainTextEdit" name="db_neg_plainTextEdit">
+                  <property name="minimumSize">
+                   <size>
+                    <width>98</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>98</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="verticalSpacer_35">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>11</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_24">
+                  <property name="minimumSize">
+                   <size>
+                    <width>98</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>98</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Slope +</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPlainTextEdit" name="slope_pos_plainTextEdit">
+                  <property name="minimumSize">
+                   <size>
+                    <width>98</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>98</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="verticalSpacer_32">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>10</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_21">
+                  <property name="minimumSize">
+                   <size>
+                    <width>98</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>98</width>
+                    <height>17</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Slope -</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPlainTextEdit" name="slope_neg_plainTextEdit">
+                  <property name="minimumSize">
+                   <size>
+                    <width>98</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>98</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="verticalSpacer_33">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>11</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </widget>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QComboBox" name="ctl_pars_comboBox">
+              <item>
+               <property name="text">
+                <string>Position PID</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Speed PID</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Force PID</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Break PID</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Break Interp.</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>System FS</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>PWM pars</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="2" column="4">
+             <widget class="QPushButton" name="start_idx_pushButton">
+              <property name="text">
+               <string>Start Indexing</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QComboBox" name="Ctl_Sel_comboBox">
+              <item>
+               <property name="text">
+                <string>Pos Ctl</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Speed Ctl</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Force Ctl</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Curr Ctl</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Break Ctl</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Idx Ctl</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <spacer name="verticalSpacer_21">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0">
+        <spacer name="horizontalSpacer_11">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="1">
+        <layout class="QVBoxLayout" name="status_verticalLayout">
+         <item>
+          <spacer name="verticalSpacer_18">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="sys_status_groupBox">
+           <property name="maximumSize">
+            <size>
+             <width>221</width>
+             <height>60</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">
+
+QGroupBox {
+    border: 1px solid gray;
+    border-radius: 9px;
+    margin-top: 0.5em;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 10px;
+    padding: 0 3px 0 3px;
+}
+
+</string>
+           </property>
+           <property name="title">
+            <string>Sys Status</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_10">
+            <item>
+             <widget class="QTextBrowser" name="sys_status_textBrowser"/>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_20">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="j_stat_groupBox">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>1</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>221</width>
+             <height>131</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>221</width>
+             <height>131</height>
+            </size>
+           </property>
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">
+
+QGroupBox {
+    border: 1px solid gray;
+    border-radius: 9px;
+    margin-top: 0.5em;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 10px;
+    padding: 0 3px 0 3px;
+}
+
+</string>
+           </property>
+           <property name="title">
+            <string>Joints Status</string>
+           </property>
+           <property name="flat">
+            <bool>false</bool>
+           </property>
+           <property name="checkable">
+            <bool>false</bool>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <layout class="QGridLayout" name="j_stat_gridLayout">
+              <item row="0" column="0">
+               <widget class="QLabel" name="label">
+                <property name="text">
+                 <string>Joint 1</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_3">
+                <property name="text">
+                 <string>Joint 3 </string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_2">
+                <property name="text">
+                 <string>Joint 2</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QTextBrowser" name="j1_stat_textBrowser">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QTextBrowser" name="j2_stat_textBrowser">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QTextBrowser" name="j3_stat_textBrowser">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_19">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="4">
+        <spacer name="horizontalSpacer_12">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="2" column="3">
+        <spacer name="verticalSpacer_22">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_op">
+      <attribute name="icon">
+       <iconset resource="Resources/tm_gui_res.qrc">
+        <normaloff>:/tm_gui/Robot Filled-50.png</normaloff>:/tm_gui/Robot Filled-50.png</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>Operation</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_7">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QGroupBox" name="op_mode_groupBox">
+           <property name="minimumSize">
+            <size>
+             <width>471</width>
+             <height>91</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>91</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">
+
+QGroupBox {
+    border: 1px solid gray;
+    border-radius: 9px;
+    margin-top: 0.5em;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 10px;
+    padding: 0 3px 0 3px;
+}
+
+</string>
+           </property>
+           <property name="title">
+            <string>Operation mode</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_5">
+            <item>
+             <layout class="QGridLayout" name="gridLayout_2">
+              <item row="0" column="1" rowspan="2">
+               <spacer name="horizontalSpacer_5">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="0" column="0" rowspan="2">
+               <widget class="QPushButton" name="start_op_pushButton">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Start Operation</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QLabel" name="label_8">
+                <property name="text">
+                 <string>Control Mode:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="6" rowspan="2">
+               <spacer name="horizontalSpacer_6">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="0" column="4">
+               <widget class="QComboBox" name="op_mode_comboBox">
+                <item>
+                 <property name="text">
+                  <string>PTP</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Force - Pos</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Joint Traj</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="0" column="5">
+               <widget class="QPushButton" name="sel_op_mode_pushButton">
+                <property name="text">
+                 <string>Select Mode</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QCheckBox" name="g_comp_checkBox">
+                <property name="text">
+                 <string>G Comp.</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_13">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="sys_status_op_groupBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>146</width>
+             <height>60</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">
+
+QGroupBox {
+    border: 1px solid gray;
+    border-radius: 9px;
+    margin-top: 0.5em;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 10px;
+    padding: 0 3px 0 3px;
+}
+
+</string>
+           </property>
+           <property name="title">
+            <string>Sys Status</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_11">
+            <item>
+             <widget class="QTextBrowser" name="sys_status_op_textBrowser"/>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_23">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="op_panel_groupBox">
+         <property name="minimumSize">
+          <size>
+           <width>711</width>
+           <height>401</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">
+
+QGroupBox {
+    border: 1px solid gray;
+    border-radius: 9px;
+    margin-top: 0.5em;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 10px;
+    padding: 0 3px 0 3px;
+}
+
+</string>
+         </property>
+         <property name="title">
+          <string>Operation Panel</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <widget class="QStackedWidget" name="op_panel_stackedWidget">
+            <property name="currentIndex">
+             <number>1</number>
+            </property>
+            <widget class="QWidget" name="ptp_page">
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <item>
+               <layout class="QGridLayout" name="ptp_gridLayout">
+                <item row="2" column="1">
+                 <widget class="QLabel" name="ptp_par1_label">
+                  <property name="text">
+                   <string>X des</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="1">
+                 <widget class="QLabel" name="ptp_par3_label">
+                  <property name="text">
+                   <string>Z Des</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="1">
+                 <spacer name="verticalSpacer_16">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="1" column="1">
+                 <spacer name="verticalSpacer_14">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="3" column="1">
+                 <spacer name="verticalSpacer_15">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="4" column="1">
+                 <widget class="QLabel" name="ptp_par2_label">
+                  <property name="text">
+                   <string>Y Des</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="3">
+                 <spacer name="horizontalSpacer_7">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QPushButton" name="exe_ptp_pushButton">
+                  <property name="text">
+                   <string>Execute</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="2">
+                 <widget class="QPlainTextEdit" name="y_des_plainTextEdit">
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="2">
+                 <widget class="QPlainTextEdit" name="x_des_plainTextEdit">
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="1">
+                 <spacer name="verticalSpacer_25">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="6" column="2">
+                 <widget class="QPlainTextEdit" name="z_des_plainTextEdit">
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <spacer name="horizontalSpacer_14">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QComboBox" name="ptp_mode_comboBox">
+                  <item>
+                   <property name="text">
+                    <string>Cartesian</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Joint</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item row="0" column="3">
+                 <widget class="QPushButton" name="home_pushButton">
+                  <property name="text">
+                   <string>Go Home!</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="f_pos_page">
+             <layout class="QHBoxLayout" name="horizontalLayout_5">
+              <item>
+               <layout class="QGridLayout" name="f_pos_gridLayout">
+                <item row="1" column="3">
+                 <widget class="QPushButton" name="update_sens_k_pushButton">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>27</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>27</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Update</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QPlainTextEdit" name="sens_k_plainTextEdit">
+                  <property name="minimumSize">
+                   <size>
+                    <width>92</width>
+                    <height>29</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>92</width>
+                    <height>29</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <spacer name="horizontalSpacer_8">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="1" column="4">
+                 <spacer name="horizontalSpacer_9">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLabel" name="label_23">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>29</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>29</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Sensor Sensivility</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLabel" name="label_26">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>29</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>29</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Scaling</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QPlainTextEdit" name="scale_k_plainTextEdit">
+                  <property name="minimumSize">
+                   <size>
+                    <width>92</width>
+                    <height>29</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>92</width>
+                    <height>29</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="4">
+                 <widget class="QCheckBox" name="idx_pose_checkBox">
+                  <property name="text">
+                   <string>Index Pose</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="3">
+                 <widget class="QPushButton" name="update_scale_k_pushButton">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>27</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>27</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Update</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="jnt_traj_page">
+             <layout class="QHBoxLayout" name="horizontalLayout_6">
+              <item>
+               <layout class="QGridLayout" name="jnt_traj_gridLayout">
+                <item row="1" column="1">
+                 <widget class="QComboBox" name="traj_var_comboBox">
+                  <item>
+                   <property name="text">
+                    <string>Speed</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>PWM</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>PWM Steps</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item row="7" column="1">
+                 <widget class="QLabel" name="traj_acc_label">
+                  <property name="text">
+                   <string>Acc Time [s]</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="1">
+                 <spacer name="verticalSpacer_26">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="2" column="1">
+                 <spacer name="verticalSpacer_27">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QLabel" name="traj_delta_label">
+                  <property name="text">
+                   <string>delta Pos [rad]</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <spacer name="verticalSpacer_28">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="5" column="1">
+                 <widget class="QLabel" name="traj_dur_label">
+                  <property name="text">
+                   <string>Duration [s]</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="3">
+                 <spacer name="horizontalSpacer_15">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="5" column="2">
+                 <widget class="QPlainTextEdit" name="traj_dur_plainTextEdit">
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="8" column="1">
+                 <spacer name="verticalSpacer_29">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="7" column="2">
+                 <widget class="QPlainTextEdit" name="traj_acct_plainTextEdit">
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <spacer name="horizontalSpacer_16">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="3" column="2">
+                 <widget class="QPlainTextEdit" name="traj_dpos_plainTextEdit">
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QComboBox" name="jnt_traj_comboBox">
+                  <item>
+                   <property name="text">
+                    <string>Joint 1</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Joint 2</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Joint 3</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QPushButton" name="exe_jnt_traj_pushButton">
+                  <property name="text">
+                   <string>Execute</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QComboBox" name="traj_int_type_comboBox">
+                  <item>
+                   <property name="text">
+                    <string>ArcTg</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Linear</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item row="9" column="2">
+                 <widget class="QPlainTextEdit" name="traj_num_steps_plainTextEdit">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="9" column="1">
+                 <widget class="QLabel" name="traj_steps_label">
+                  <property name="text">
+                   <string>Num Steps</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="10" column="1">
+                 <spacer name="verticalSpacer_34">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_24">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>j_sel_comboBox</tabstop>
+  <tabstop>ack_Safe_pushButton</tabstop>
+  <tabstop>Ctl_Sel_comboBox</tabstop>
+  <tabstop>safe_pars_comboBox</tabstop>
+  <tabstop>safe_par_min_val_plainTextEdit</tabstop>
+  <tabstop>safe_par_max_val_plainTextEdit</tabstop>
+  <tabstop>set_safe_par_pushButton</tabstop>
+  <tabstop>ctl_pars_comboBox</tabstop>
+  <tabstop>kp_plainTextEdit</tabstop>
+  <tabstop>ki_plainTextEdit</tabstop>
+  <tabstop>kd_plainTextEdit</tabstop>
+  <tabstop>sat_plainTextEdit</tabstop>
+  <tabstop>isat_plainTextEdit</tabstop>
+  <tabstop>fs_plainTextEdit</tabstop>
+  <tabstop>t_change_plainTextEdit</tabstop>
+  <tabstop>int_fun_comboBox</tabstop>
+  <tabstop>set_ctl_par_pushButton</tabstop>
+  <tabstop>start_idx_pushButton</tabstop>
+  <tabstop>p_idx_ref_pushButton</tabstop>
+  <tabstop>n_idx_ref_pushButton</tabstop>
+  <tabstop>start_op_pushButton</tabstop>
+  <tabstop>exe_ptp_pushButton</tabstop>
+  <tabstop>sens_k_plainTextEdit</tabstop>
+  <tabstop>update_sens_k_pushButton</tabstop>
+  <tabstop>j1_stat_textBrowser</tabstop>
+  <tabstop>j3_stat_textBrowser</tabstop>
+  <tabstop>j2_stat_textBrowser</tabstop>
+  <tabstop>sys_status_textBrowser</tabstop>
+  <tabstop>sys_status_op_textBrowser</tabstop>
+ </tabstops>
+ <resources>
+  <include location="Resources/tm_gui_res.qrc"/>
+ </resources>
+ <connections/>
+</ui>

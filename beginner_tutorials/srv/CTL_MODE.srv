@@ -1,0 +1,6 @@
+uint8 PTP=0
+uint8 FORCE_POS=1
+uint8 mode
+float32 force_k
+---
+bool ack

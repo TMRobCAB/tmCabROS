@@ -1,0 +1,17 @@
+<library path="lib/librqt_tm_operation">
+  <class name="rqt_tm_operation/TmOperation" type="rqt_tm_operation::TmOperation" base_class_type="rqt_gui_cpp::Plugin">
+    <description>
+      A GUI plugin to operate 3DOF TMs.
+    </description>
+    <qtgui>
+      <group>
+        <label>Robot Tools</label>
+        <icon type="theme">folder</icon>
+        <statustip>Plugins related to robot tools.</statustip>
+      </group>
+      <label>TM Operation</label>
+      <icon type="theme">image-x-generic</icon>
+      <statustip>A GUI plugin to operate 3DOF TMs.</statustip>
+    </qtgui>
+  </class>
+</library>

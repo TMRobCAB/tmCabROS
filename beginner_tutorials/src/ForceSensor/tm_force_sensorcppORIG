@@ -1,0 +1,198 @@
+#include "tm_force_sensor.h"
+
+//usbBlinkLED_USB7204(udev, options);
+
+int TmForceSensor::Init(void) {
+
+	_udev = 0;
+
+	if (libusb_init(NULL) < 0) {
+		perror("libusb_init: Failed to initialize libusb");
+		return -1;
+	}
+
+	if ((_udev = usb_device_find_USB_MCC(USB7204_PID, NULL))) {
+		printf("USB-7204 Device is found!\n");
+	} else {
+		printf("No device found.\n");
+		return -2;
+	}
+
+	// some initialization
+	printf("Building calibration table.  This may take a while ...\n");
+	usbBuildGainTable_USB7204(_udev, _table_AIN);
+
+//	  for (int i = 0; i < NGAINS_USB7204; i++ ) {
+//	    for (int j = 0; j < NCHAN_USB7204/2; j++) {
+//	      printf("Calibration Table DiffChs: Range = %d Channel = %d Slope = %f   Offset = %f\n",
+//		     i, j, table_AIN[DF][i][j].slope, table_AIN[DF][i][j].intercept);
+//	    }
+//	  }
+
+	std::cout << "fX Slope = " << _table_AIN[DF][DAQ_GAIN][DAQ_FX_CHANNEL].slope
+			<< " Offset = "
+			<< _table_AIN[DF][DAQ_GAIN][DAQ_FX_CHANNEL].intercept << std::endl;
+
+	std::cout << "fX Slope = " << _table_AIN[DF][DAQ_GAIN][DAQ_FY_CHANNEL].slope
+			<< " Offset = "
+			<< _table_AIN[DF][DAQ_GAIN][DAQ_FY_CHANNEL].intercept << std::endl;
+
+	std::cout << "fX Slope = " << _table_AIN[DF][DAQ_GAIN][DAQ_FZ_CHANNEL].slope
+			<< " Offset = "
+			<< _table_AIN[DF][DAQ_GAIN][DAQ_FZ_CHANNEL].intercept << std::endl;
+
+//	  for (int j = 0; j < NCHAN_USB7204; j++) {
+//	    printf("Calibration Table SingEndChs: Range = %d Channel = %d Slope = %f   Offset = %f\n",
+//	    		BP_10_00V, j, table_AIN[SE][BP_10_00V][j].slope, table_AIN[SE][BP_10_00V][j].intercept);
+//	  }
+
+	_init = true;
+
+	return 0;
+}
+
+int TmForceSensor::GetForce(ForceSample & fVal) {
+
+	if (!_init) {
+
+		std::cout << "Sensor not init" << std::endl;
+		return -1;
+	}
+
+	int flag;
+
+	float nMeas, fMeas;
+
+	flag = fcntl(fileno(stdin), F_GETFL);
+	fcntl(0, F_SETFL, flag | O_NONBLOCK);
+
+	nMeas = usbAIn_USB7204(_udev, DF, DAQ_FX_CHANNEL, DAQ_GAIN)
+			* _table_AIN[DF][DAQ_GAIN][DAQ_FX_CHANNEL].slope
+			+ _table_AIN[DF][DAQ_GAIN][DAQ_FX_CHANNEL].intercept;
+
+	fMeas = (nMeas * 2 / DAQ_ALC - 1) * SENSOR_FX_SLOPE + SENSOR_FX_OFFSET;
+
+	fVal.setFX(fMeas);
+
+	nMeas = usbAIn_USB7204(_udev, DF, DAQ_FY_CHANNEL, DAQ_GAIN)
+			* _table_AIN[DF][DAQ_GAIN][DAQ_FY_CHANNEL].slope
+			+ _table_AIN[DF][DAQ_GAIN][DAQ_FY_CHANNEL].intercept;
+
+	fMeas = (nMeas * 2 / DAQ_ALC - 1) * SENSOR_FY_SLOPE + SENSOR_FY_OFFSET;
+
+	fVal.setFY(fMeas);
+
+	nMeas = usbAIn_USB7204(_udev, DF, DAQ_FZ_CHANNEL, DAQ_GAIN)
+			* _table_AIN[DF][DAQ_GAIN][DAQ_FZ_CHANNEL].slope
+			+ _table_AIN[DF][DAQ_GAIN][DAQ_FZ_CHANNEL].intercept;
+
+	fMeas = (nMeas * 2 / DAQ_ALC - 1) * SENSOR_FZ_SLOPE + SENSOR_FZ_OFFSET;
+
+	fVal.setFZ(fMeas);
+
+	fcntl(fileno(stdin), F_SETFL, flag);
+
+	return 0;
+}
+
+int TmForceSensor::GetForceX(ForceSample& fVal) {
+
+	if (!_init) {
+
+		std::cout << "Sensor not init" << std::endl;
+		return -1;
+	}
+
+	int flag;
+
+	float nMeas, fMeas;
+
+	flag = fcntl(fileno(stdin), F_GETFL);
+	fcntl(0, F_SETFL, flag | O_NONBLOCK);
+
+	nMeas = usbAIn_USB7204(_udev, DF, DAQ_FX_CHANNEL, DAQ_GAIN)
+			* _table_AIN[DF][DAQ_GAIN][DAQ_FX_CHANNEL].slope
+			+ _table_AIN[DF][DAQ_GAIN][DAQ_FX_CHANNEL].intercept;
+
+	fMeas = (nMeas * 2 / DAQ_ALC - 1) * SENSOR_FX_SLOPE + SENSOR_FX_OFFSET;
+
+	fVal.setFX(fMeas);
+
+	fcntl(fileno(stdin), F_SETFL, flag);
+
+	return 0;
+}
+
+int TmForceSensor::GetForceY(ForceSample& fVal) {
+
+	if (!_init) {
+
+		std::cout << "Sensor not init" << std::endl;
+		return -1;
+	}
+
+	int flag;
+
+	float nMeas, fMeas;
+
+	flag = fcntl(fileno(stdin), F_GETFL);
+	fcntl(0, F_SETFL, flag | O_NONBLOCK);
+
+	nMeas = usbAIn_USB7204(_udev, DF, DAQ_FY_CHANNEL, DAQ_GAIN)
+			* _table_AIN[DF][DAQ_GAIN][DAQ_FY_CHANNEL].slope
+			+ _table_AIN[DF][DAQ_GAIN][DAQ_FY_CHANNEL].intercept;
+
+	fMeas = (nMeas * 2 / DAQ_ALC - 1) * SENSOR_FY_SLOPE + SENSOR_FY_OFFSET;
+
+	fVal.setFY(fMeas);
+
+	fcntl(fileno(stdin), F_SETFL, flag);
+
+	return 0;
+}
+
+int TmForceSensor::GetForceZ(ForceSample& fVal) {
+
+	if (!_init) {
+
+		std::cout << "Sensor not init" << std::endl;
+		return -1;
+	}
+
+	int flag;
+
+	float nMeas, fMeas;
+
+	flag = fcntl(fileno(stdin), F_GETFL);
+	fcntl(0, F_SETFL, flag | O_NONBLOCK);
+
+	nMeas = usbAIn_USB7204(_udev, DF, DAQ_FZ_CHANNEL, DAQ_GAIN)
+			* _table_AIN[DF][DAQ_GAIN][DAQ_FZ_CHANNEL].slope
+			+ _table_AIN[DF][DAQ_GAIN][DAQ_FZ_CHANNEL].intercept;
+
+	fMeas = (nMeas * 2 / DAQ_ALC - 1) * SENSOR_FZ_SLOPE + SENSOR_FZ_OFFSET;
+
+	fVal.setFZ(fMeas);
+
+	fcntl(fileno(stdin), F_SETFL, flag);
+
+	return 0;
+}
+
+int TmForceSensor::Reset(void) {
+
+	if (!_init) {
+
+		std::cout << "Sensor not init" << std::endl;
+		return -1;
+	}
+
+	usbReset_USB7204(_udev, 1);
+	libusb_clear_halt(_udev, LIBUSB_ENDPOINT_IN | 0);
+	libusb_release_interface(_udev, 0);
+	libusb_close(_udev);
+
+	this->Init();
+
+	return 0;
+}

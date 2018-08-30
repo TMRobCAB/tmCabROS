@@ -1,0 +1,9 @@
+uint8 PTP_CART=0
+uint8 PTP_JNT=1
+uint8 mode
+
+float32 Xd
+float32 Yd
+float32 Zd
+---
+bool ack

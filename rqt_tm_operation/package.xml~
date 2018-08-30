@@ -1,0 +1,21 @@
+<package>
+  <name>rqt_image_view</name>
+  <version>0.3.11</version>
+  <description>rqt_tm_operation provides a GUI plugin for operating 3DOF TMs.</description>
+  <maintainer email="claus.smitt@ib.edu.ar">Claus Smitt</maintainer>
+
+  <license>BSD</license>
+
+  <author>Claus Smitt</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>rqt_gui</build_depend>
+  <build_depend>rqt_gui_cpp</build_depend>
+  <run_depend>rqt_gui</run_depend>
+  <run_depend>rqt_gui_cpp</run_depend>
+  
+  <export>
+    <rqt_gui plugin="${prefix}/plugin.xml"/>
+  </export>
+</package>
