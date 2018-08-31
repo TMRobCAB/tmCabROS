@@ -5,7 +5,7 @@
  *      Author: l_vis
  */
 
-#include "beginner_tutorials/joint_tray_interp.h"
+#include "tm_cab/joint_tray_interp.h"
 
 #include <boost/interprocess/shared_memory_object.hpp>
 #include <boost/interprocess/mapped_region.hpp>
@@ -37,11 +37,11 @@ int main(int argc, char **argv) {
 	ros::ServiceServer srvSetFs = n.advertiseService("/exe_jnt_traj",
 			&JointTrayInterp::ExeTraj, &trayInterp);
 
-	_speedP1 = n.advertise<beginner_tutorials::POS_REF>("/joint_1_speed_ref",
+	_speedP1 = n.advertise<tm_cab::POS_REF>("/joint_1_speed_ref",
 			100);
-	_speedP2 = n.advertise<beginner_tutorials::POS_REF>("/joint_2_speed_ref",
+	_speedP2 = n.advertise<tm_cab::POS_REF>("/joint_2_speed_ref",
 			100);
-	_speedP3 = n.advertise<beginner_tutorials::POS_REF>("/joint_3_speed_ref",
+	_speedP3 = n.advertise<tm_cab::POS_REF>("/joint_3_speed_ref",
 			100);
 
 	bool fMemMapped;
@@ -162,17 +162,17 @@ int main(int argc, char **argv) {
 }
 
 void JointTrayInterp::sysStatusCallback(
-		const beginner_tutorials::SYS_STATUS & msg) {
+		const tm_cab::SYS_STATUS & msg) {
 
-	if (msg.sys_status == beginner_tutorials::SYS_STATUS::RUNNING)
+	if (msg.sys_status == tm_cab::SYS_STATUS::RUNNING)
 		_sysRunning = true;
 	else
 		_sysRunning = false;
 
 }
 
-bool JointTrayInterp::ExeTraj(beginner_tutorials::jnt_traj::Request& req,
-		beginner_tutorials::jnt_traj::Response& res) {
+bool JointTrayInterp::ExeTraj(tm_cab::jnt_traj::Request& req,
+		tm_cab::jnt_traj::Response& res) {
 
 	ros::NodeHandle m;
 
@@ -182,7 +182,7 @@ bool JointTrayInterp::ExeTraj(beginner_tutorials::jnt_traj::Request& req,
 
 	jnt_ref_shared * jntRefMsg;
 
-	beginner_tutorials::POS_REF speedRefMsg;
+	tm_cab::POS_REF speedRefMsg;
 
 	if (!_sysRunning) {
 
@@ -257,7 +257,7 @@ bool JointTrayInterp::ExeTraj(beginner_tutorials::jnt_traj::Request& req,
 	float wMax;
 
 	switch (req.varId) {
-	case beginner_tutorials::jnt_traj::Request::SPEED:
+	case tm_cab::jnt_traj::Request::SPEED:
 
 		_wFinal = _dPos / (_duration - _accT);
 
@@ -265,7 +265,7 @@ bool JointTrayInterp::ExeTraj(beginner_tutorials::jnt_traj::Request& req,
 
 		varId = &jntRefMsg->dq;
 		break;
-	case beginner_tutorials::jnt_traj::Request::POS:
+	case tm_cab::jnt_traj::Request::POS:
 
 		_wFinal = _dPos / (_duration - _accT);
 
@@ -273,7 +273,7 @@ bool JointTrayInterp::ExeTraj(beginner_tutorials::jnt_traj::Request& req,
 
 		varId = &jntRefMsg->q;
 		break;
-	case beginner_tutorials::jnt_traj::Request::PWM:
+	case tm_cab::jnt_traj::Request::PWM:
 
 		_wFinal = _dPos;
 
@@ -303,12 +303,12 @@ bool JointTrayInterp::ExeTraj(beginner_tutorials::jnt_traj::Request& req,
 		while (ros::ok() && !_done) {
 
 			switch (req.intType) {
-			case beginner_tutorials::jnt_traj::Request::ARC_TG:
+			case tm_cab::jnt_traj::Request::ARC_TG:
 
 				speedRefMsg.q_D = ComputeNextPointArc();
 
 				break;
-			case beginner_tutorials::jnt_traj::Request::LIN:
+			case tm_cab::jnt_traj::Request::LIN:
 
 				speedRefMsg.q_D = ComputeNextPointLin();
 

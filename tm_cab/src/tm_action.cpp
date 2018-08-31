@@ -4,41 +4,41 @@
 #include <sstream>
 #include <vector>
 
-#include "beginner_tutorials/SAFE_CURR.h"
+#include "tm_cab/SAFE_CURR.h"
 
-#include "beginner_tutorials/SAFE_FORCE.h"
+#include "tm_cab/SAFE_FORCE.h"
 
-#include "beginner_tutorials/SAFE_POS.h"
+#include "tm_cab/SAFE_POS.h"
 
-#include "beginner_tutorials/SAFE_POS_E.h"
+#include "tm_cab/SAFE_POS_E.h"
 
-#include "beginner_tutorials/SAFE_PWM.h"
+#include "tm_cab/SAFE_PWM.h"
 
-#include "beginner_tutorials/SAFE_SPEED.h"
+#include "tm_cab/SAFE_SPEED.h"
 
-#include "beginner_tutorials/SELECT_CTL.h"
+#include "tm_cab/SELECT_CTL.h"
 
-#include "beginner_tutorials/SET_INTER.h"
+#include "tm_cab/SET_INTER.h"
 
-#include "beginner_tutorials/SAFE_STATE.h"
+#include "tm_cab/SAFE_STATE.h"
 
-#include "beginner_tutorials/SET_SYS_FS.h"
+#include "tm_cab/SET_SYS_FS.h"
 
-#include "beginner_tutorials/SET_PAR_PID.h"
+#include "tm_cab/SET_PAR_PID.h"
 
-#include "beginner_tutorials/POS_REF.h"
+#include "tm_cab/POS_REF.h"
 
-#include "beginner_tutorials/START.h"
+#include "tm_cab/START.h"
 
-#include "beginner_tutorials/STOP.h"
+#include "tm_cab/STOP.h"
 
-#include "beginner_tutorials/START_TM_CTL.h"
+#include "tm_cab/START_TM_CTL.h"
 
-#include "beginner_tutorials/STOP_TM_CTL.h"
+#include "tm_cab/STOP_TM_CTL.h"
 
-#include "beginner_tutorials/PTP_TM_CTL.h"
+#include "tm_cab/PTP_TM_CTL.h"
 
-#include "beginner_tutorials/CTL_MODE.h"
+#include "tm_cab/CTL_MODE.h"
 
 #include <std_srvs/Trigger.h>
 
@@ -97,10 +97,10 @@ int F_Ptp(int argc, char **argv, int argIdx) {
 	}
 
 	ros::NodeHandle n;
-	ros::ServiceClient client = n.serviceClient<beginner_tutorials::PTP_TM_CTL>(
+	ros::ServiceClient client = n.serviceClient<tm_cab::PTP_TM_CTL>(
 			"tm_ptp");
 
-	beginner_tutorials::PTP_TM_CTL srv;
+	tm_cab::PTP_TM_CTL srv;
 
 	srv.request.Xd = atof(argv[argIdx + 1]);
 	srv.request.Yd = atof(argv[argIdx + 2]);
@@ -133,12 +133,12 @@ int F_CtlModeForce(int argc, char **argv, int argIdx) {
 	}
 
 	ros::NodeHandle n;
-	ros::ServiceClient client = n.serviceClient<beginner_tutorials::CTL_MODE>(
+	ros::ServiceClient client = n.serviceClient<tm_cab::CTL_MODE>(
 			"tm_ctl_set_mode");
 
-	beginner_tutorials::CTL_MODE srv;
+	tm_cab::CTL_MODE srv;
 
-	srv.request.mode = beginner_tutorials::CTL_MODE::Request::FORCE_POS;
+	srv.request.mode = tm_cab::CTL_MODE::Request::FORCE_POS;
 	srv.request.force_k = atof(argv[argIdx + 1]);
 
 	if (client.call(srv)) {
@@ -159,12 +159,12 @@ int F_CtlModeForce(int argc, char **argv, int argIdx) {
 int F_CtlModePTP(int argc, char **argv, int argIdx) {
 
 	ros::NodeHandle n;
-	ros::ServiceClient client = n.serviceClient<beginner_tutorials::CTL_MODE>(
+	ros::ServiceClient client = n.serviceClient<tm_cab::CTL_MODE>(
 			"tm_ctl_set_mode");
 
-	beginner_tutorials::CTL_MODE srv;
+	tm_cab::CTL_MODE srv;
 
-	srv.request.mode = beginner_tutorials::CTL_MODE::Request::PTP;
+	srv.request.mode = tm_cab::CTL_MODE::Request::PTP;
 
 	//ROS_INFO("calling set ptp");
 
@@ -199,7 +199,7 @@ int F_SetSafeCurr(int argc, char **argv, int argIdx) {
 	ros::ServiceClient client;
 
 	stringstream srvName;
-	beginner_tutorials::SAFE_CURR srv;
+	tm_cab::SAFE_CURR srv;
 
 	for (int i = 1; i < 4; ++i) {
 
@@ -209,7 +209,7 @@ int F_SetSafeCurr(int argc, char **argv, int argIdx) {
 		srvName.str("");
 		srvName << "/joint_" << i << "_set_safe_curr";
 
-		client = n.serviceClient<beginner_tutorials::SAFE_CURR>(srvName.str());
+		client = n.serviceClient<tm_cab::SAFE_CURR>(srvName.str());
 
 		srv.request.maxC = atof(argv[argIdx + 1]);
 		srv.request.minC = atof(argv[argIdx + 2]);
@@ -241,7 +241,7 @@ int F_SetSafeForce(int argc, char **argv, int argIdx) {
 	ros::ServiceClient client;
 
 	stringstream srvName;
-	beginner_tutorials::SAFE_FORCE srv;
+	tm_cab::SAFE_FORCE srv;
 
 	for (int i = 1; i < 4; ++i) {
 
@@ -251,7 +251,7 @@ int F_SetSafeForce(int argc, char **argv, int argIdx) {
 		srvName.str("");
 		srvName << "/joint_" << i << "_set_safe_force";
 
-		client = n.serviceClient<beginner_tutorials::SAFE_FORCE>(srvName.str());
+		client = n.serviceClient<tm_cab::SAFE_FORCE>(srvName.str());
 
 		srv.request.maxF = atof(argv[argIdx + 1]);
 		srv.request.minF = atof(argv[argIdx + 2]);
@@ -283,7 +283,7 @@ int F_SetSafePosE(int argc, char **argv, int argIdx) {
 	ros::ServiceClient client;
 
 	stringstream srvName;
-	beginner_tutorials::SAFE_POS_E srv;
+	tm_cab::SAFE_POS_E srv;
 
 	for (int i = 1; i < 4; ++i) {
 
@@ -293,7 +293,7 @@ int F_SetSafePosE(int argc, char **argv, int argIdx) {
 		srvName.str("");
 		srvName << "/joint_" << i << "_set_safe_Pos_E";
 
-		client = n.serviceClient<beginner_tutorials::SAFE_POS_E>(srvName.str());
+		client = n.serviceClient<tm_cab::SAFE_POS_E>(srvName.str());
 
 		srv.request.SPEM = (float) atof(argv[argIdx + 1]);
 		srv.request.SPEm = (float) atof(argv[argIdx + 2]);
@@ -325,7 +325,7 @@ int F_SetSafePos(int argc, char **argv, int argIdx) {
 	ros::ServiceClient client;
 
 	stringstream srvName;
-	beginner_tutorials::SAFE_POS srv;
+	tm_cab::SAFE_POS srv;
 
 	for (int i = 1; i < 4; ++i) {
 
@@ -335,7 +335,7 @@ int F_SetSafePos(int argc, char **argv, int argIdx) {
 		srvName.str("");
 		srvName << "/joint_" << i << "_set_safe_Pos";
 
-		client = n.serviceClient<beginner_tutorials::SAFE_POS>(srvName.str());
+		client = n.serviceClient<tm_cab::SAFE_POS>(srvName.str());
 
 		srv.request.maxPos = atof(argv[argIdx + 1]);
 		srv.request.minPos = atof(argv[argIdx + 2]);
@@ -369,7 +369,7 @@ int F_SetSafePWM(int argc, char **argv, int argIdx) {
 	ros::ServiceClient client;
 
 	stringstream srvName;
-	beginner_tutorials::SAFE_PWM srv;
+	tm_cab::SAFE_PWM srv;
 
 	for (int i = 1; i < 4; ++i) {
 
@@ -379,7 +379,7 @@ int F_SetSafePWM(int argc, char **argv, int argIdx) {
 		srvName.str("");
 		srvName << "/joint_" << i << "_set_safe_PWM";
 
-		client = n.serviceClient<beginner_tutorials::SAFE_PWM>(srvName.str());
+		client = n.serviceClient<tm_cab::SAFE_PWM>(srvName.str());
 
 		srv.request.maxP = atof(argv[argIdx + 1]);
 		srv.request.minP = atof(argv[argIdx + 2]);
@@ -411,7 +411,7 @@ int F_SetSafeSpeed(int argc, char **argv, int argIdx) {
 	ros::ServiceClient client;
 
 	stringstream srvName;
-	beginner_tutorials::SAFE_SPEED srv;
+	tm_cab::SAFE_SPEED srv;
 
 	for (int i = 1; i < 4; ++i) {
 
@@ -422,7 +422,7 @@ int F_SetSafeSpeed(int argc, char **argv, int argIdx) {
 		srvName.str("");
 		srvName << "/joint_" << i << "_set_safe_Speed";
 
-		client = n.serviceClient<beginner_tutorials::SAFE_SPEED>(srvName.str());
+		client = n.serviceClient<tm_cab::SAFE_SPEED>(srvName.str());
 
 		srv.request.maxS = atof(argv[argIdx + 1]);
 		srv.request.minS = atof(argv[argIdx + 2]);
@@ -454,7 +454,7 @@ int F_SetInter(int argc, char **argv, int argIdx) {
 	ros::ServiceClient client;
 
 	stringstream srvName;
-	beginner_tutorials::SET_INTER srv;
+	tm_cab::SET_INTER srv;
 
 	for (int i = 1; i < 4; ++i) {
 
@@ -464,14 +464,14 @@ int F_SetInter(int argc, char **argv, int argIdx) {
 		srvName.str("");
 		srvName << "/joint_" << i << "_set_inter";
 
-		client = n.serviceClient<beginner_tutorials::SET_INTER>(srvName.str());
+		client = n.serviceClient<tm_cab::SET_INTER>(srvName.str());
 
 		switch (*argv[argIdx + 1]) {
 		case 'l':
-			srv.request.id = beginner_tutorials::SET_INTER::Request::FLIN;
+			srv.request.id = tm_cab::SET_INTER::Request::FLIN;
 			break;
 		case 'a':
-			srv.request.id = beginner_tutorials::SET_INTER::Request::FARC;
+			srv.request.id = tm_cab::SET_INTER::Request::FARC;
 			break;
 		default:
 			ROS_ERROR("First arguments must l (linear) or a (arctg)");
@@ -510,7 +510,7 @@ int F_SetParsPosPID(int argc, char **argv, int argIdx) {
 	ros::ServiceClient client;
 
 	stringstream srvName;
-	beginner_tutorials::SET_PAR_PID srv;
+	tm_cab::SET_PAR_PID srv;
 
 	for (int i = 1; i < 4; ++i) {
 
@@ -520,24 +520,24 @@ int F_SetParsPosPID(int argc, char **argv, int argIdx) {
 		srvName.str("");
 		srvName << "/joint_" << i << "_set_par_pid_pos";
 
-		client = n.serviceClient<beginner_tutorials::SET_PAR_PID>(
+		client = n.serviceClient<tm_cab::SET_PAR_PID>(
 				srvName.str());
 
 		if (strcmp(argv[argIdx + 1], "kp") == 0) {
 
-			srv.request.par_id = beginner_tutorials::SET_PAR_PID::Request::KP;
+			srv.request.par_id = tm_cab::SET_PAR_PID::Request::KP;
 		} else if (strcmp(argv[argIdx + 1], "ki") == 0) {
 
-			srv.request.par_id = beginner_tutorials::SET_PAR_PID::Request::KI;
+			srv.request.par_id = tm_cab::SET_PAR_PID::Request::KI;
 		} else if (strcmp(argv[argIdx + 1], "kd") == 0) {
 
-			srv.request.par_id = beginner_tutorials::SET_PAR_PID::Request::KD;
+			srv.request.par_id = tm_cab::SET_PAR_PID::Request::KD;
 		} else if (strcmp(argv[argIdx + 1], "sat") == 0) {
 
-			srv.request.par_id = beginner_tutorials::SET_PAR_PID::Request::SAT;
+			srv.request.par_id = tm_cab::SET_PAR_PID::Request::SAT;
 		} else if (strcmp(argv[argIdx + 1], "isat") == 0) {
 
-			srv.request.par_id = beginner_tutorials::SET_PAR_PID::Request::ISAT;
+			srv.request.par_id = tm_cab::SET_PAR_PID::Request::ISAT;
 		} else {
 
 			ROS_ERROR("First argument must be among: kp ki kd sat isat)");
@@ -545,7 +545,7 @@ int F_SetParsPosPID(int argc, char **argv, int argIdx) {
 			//return -1;
 		}
 
-		srv.request.pid_id = beginner_tutorials::SET_PAR_PID::Request::POS_PID;
+		srv.request.pid_id = tm_cab::SET_PAR_PID::Request::POS_PID;
 
 		srv.request.value = atof(argv[argIdx + 2]);
 		if (client.call(srv)) {
@@ -570,7 +570,7 @@ int F_SelCtl(int argc, char **argv, int argIdx) {
 
 	stringstream srvName;
 
-	beginner_tutorials::SELECT_CTL srv;
+	tm_cab::SELECT_CTL srv;
 	for (int i = 1; i < 4; ++i) {
 
 		if (_jointNum != 0 && _jointNum != i)
@@ -579,23 +579,23 @@ int F_SelCtl(int argc, char **argv, int argIdx) {
 		srvName.str("");
 		srvName << "/joint_" << i << "_select_Ctl";
 
-		client = n.serviceClient<beginner_tutorials::SELECT_CTL>(srvName.str());
+		client = n.serviceClient<tm_cab::SELECT_CTL>(srvName.str());
 
 		if (strcmp(argv[argIdx + 1], "break") == 0) {
 
-			srv.request.id = beginner_tutorials::SELECT_CTL::Request::BREAK_CTL;
+			srv.request.id = tm_cab::SELECT_CTL::Request::BREAK_CTL;
 		} else if (strcmp(argv[argIdx + 1], "pos") == 0) {
 
-			srv.request.id = beginner_tutorials::SELECT_CTL::Request::POS_CTL;
+			srv.request.id = tm_cab::SELECT_CTL::Request::POS_CTL;
 		} else if (strcmp(argv[argIdx + 1], "speed") == 0) {
 
-			srv.request.id = beginner_tutorials::SELECT_CTL::Request::SPEED_CTL;
+			srv.request.id = tm_cab::SELECT_CTL::Request::SPEED_CTL;
 		} else if (strcmp(argv[argIdx + 1], "force") == 0) {
 
-			srv.request.id = beginner_tutorials::SELECT_CTL::Request::FORCE_CTL;
+			srv.request.id = tm_cab::SELECT_CTL::Request::FORCE_CTL;
 		} else if (strcmp(argv[argIdx + 1], "idx") == 0) {
 
-			srv.request.id = beginner_tutorials::SELECT_CTL::Request::IDX_CTL;
+			srv.request.id = tm_cab::SELECT_CTL::Request::IDX_CTL;
 		} else {
 
 			ROS_ERROR("Argument must be among: break pos speed force idx)");
@@ -631,7 +631,7 @@ int F_SetFS(int argc, char **argv, int argIdx) {
 	ros::ServiceClient client;
 
 	stringstream srvName;
-	beginner_tutorials::SET_SYS_FS srv;
+	tm_cab::SET_SYS_FS srv;
 
 	for (int i = 1; i < 4; ++i) {
 
@@ -641,7 +641,7 @@ int F_SetFS(int argc, char **argv, int argIdx) {
 		srvName.str("");
 		srvName << "/joint_" << i << "_set_sys_FS";
 
-		client = n.serviceClient<beginner_tutorials::SET_SYS_FS>(srvName.str());
+		client = n.serviceClient<tm_cab::SET_SYS_FS>(srvName.str());
 
 		srv.request.sysFS = atoi(argv[argIdx + 1]);
 		if (client.call(srv)) {
@@ -665,11 +665,11 @@ int F_StartTM(int argc, char **argv, int argIdx) {
 	ros::ServiceClient client;
 
 	stringstream srvName;
-	beginner_tutorials::START_TM_CTL srv;
+	tm_cab::START_TM_CTL srv;
 
 	srvName << "start_ctl";
 
-	client = n.serviceClient<beginner_tutorials::START_TM_CTL>(srvName.str());
+	client = n.serviceClient<tm_cab::START_TM_CTL>(srvName.str());
 
 	if (client.call(srv)) {
 
@@ -691,11 +691,11 @@ int F_StopTM(int argc, char **argv, int argIdx) {
 	ros::ServiceClient client;
 
 	stringstream srvName;
-	beginner_tutorials::STOP_TM_CTL srv;
+	tm_cab::STOP_TM_CTL srv;
 
 	srvName << "stop_ctl";
 
-	client = n.serviceClient<beginner_tutorials::STOP_TM_CTL>(srvName.str());
+	client = n.serviceClient<tm_cab::STOP_TM_CTL>(srvName.str());
 
 	if (client.call(srv)) {
 
@@ -731,9 +731,9 @@ int F_IdxJoint(int argc, char **argv, int argIdx) {
 	srvName.str("");
 	srvName << "/joint_" << jNum << "_start";
 
-	client = n.serviceClient<beginner_tutorials::START>(srvName.str());
+	client = n.serviceClient<tm_cab::START>(srvName.str());
 
-	beginner_tutorials::START startSrv;
+	tm_cab::START startSrv;
 
 	if (client.call(startSrv)) {
 
@@ -753,10 +753,10 @@ int F_IdxJoint(int argc, char **argv, int argIdx) {
 	pubName.clear();
 	pubName << "/joint_" << jNum << "_pos_ref";
 
-	ros::Publisher keyPub = n.advertise<beginner_tutorials::POS_REF>(
+	ros::Publisher keyPub = n.advertise<tm_cab::POS_REF>(
 			pubName.str(), 1000);
 
-	beginner_tutorials::POS_REF refMsg;
+	tm_cab::POS_REF refMsg;
 
 	char key = 0;
 
@@ -802,9 +802,9 @@ int F_IdxJoint(int argc, char **argv, int argIdx) {
 
 	client.shutdown();
 
-	client = n.serviceClient<beginner_tutorials::STOP>(srvS.str());
+	client = n.serviceClient<tm_cab::STOP>(srvS.str());
 
-	beginner_tutorials::STOP stopSrv;
+	tm_cab::STOP stopSrv;
 
 	if (client.call(stopSrv)) {
 
@@ -827,7 +827,7 @@ int F_SetJoinSafe(int argc, char **argv, int argIdx) {
 	ros::ServiceClient client;
 
 	stringstream srvName;
-	beginner_tutorials::SAFE_STATE srv;
+	tm_cab::SAFE_STATE srv;
 
 	for (int i = 1; i < 4; ++i) {
 
@@ -837,7 +837,7 @@ int F_SetJoinSafe(int argc, char **argv, int argIdx) {
 		srvName.str("");
 		srvName << "/joint_" << i << "_set_safe";
 
-		client = n.serviceClient<beginner_tutorials::SAFE_STATE>(srvName.str());
+		client = n.serviceClient<tm_cab::SAFE_STATE>(srvName.str());
 
 		if (client.call(srv)) {
 

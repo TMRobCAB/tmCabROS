@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(beginner_tutorials)
+project(tm_cab)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -136,7 +136,7 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include src/DriverFsm src/sflash
-  LIBRARIES beginner_tutorials
+  LIBRARIES tm_cab
    CATKIN_DEPENDS kdl_parser message_runtime roscpp rospy std_msgs
    moveit_core
    moveit_ros_move_group
@@ -159,24 +159,24 @@ include_directories(
 )
 
 ## Declare a C++ library
-# add_library(beginner_tutorials
-#   src/${PROJECT_NAME}/beginner_tutorials.cpp
+# add_library(tm_cab
+#   src/${PROJECT_NAME}/tm_cab.cpp
 # )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies(beginner_tutorials ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(tm_cab ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-# add_executable(beginner_tutorials_node src/beginner_tutorials_node.cpp)
+# add_executable(tm_cab_node src/tm_cab_node.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-# add_dependencies(beginner_tutorials_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(tm_cab_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(beginner_tutorials_node
+# target_link_libraries(tm_cab_node
 #   ${catkin_LIBRARIES}
 # )
 
@@ -195,7 +195,7 @@ include_directories(
 # )
 
 ## Mark executables and/or libraries for installation
-# install(TARGETS beginner_tutorials beginner_tutorials_node
+# install(TARGETS tm_cab tm_cab_node
 #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -220,7 +220,7 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_beginner_tutorials.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_tm_cab.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
@@ -230,11 +230,11 @@ include_directories(
 
 add_executable(tm_manager src/tm_manager.cpp)
 target_link_libraries(tm_manager ${catkin_LIBRARIES})
-add_dependencies(tm_manager beginner_tutorials_gencpp)
+add_dependencies(tm_manager tm_cab_gencpp)
 
 add_executable(tm_action src/tm_action.cpp)
 target_link_libraries(tm_action ${catkin_LIBRARIES})
-add_dependencies(tm_action beginner_tutorials_gencpp)
+add_dependencies(tm_action tm_cab_gencpp)
 
 add_executable(joint_driver src/joint_driver.cpp)
 
@@ -248,18 +248,18 @@ add_library( sflash src/sflash/sflash.c
 				src/sflash/uart_handler.c)
 
 target_link_libraries(joint_driver ${catkin_LIBRARIES} DriverFsm sflash rt)
-add_dependencies(joint_driver beginner_tutorials_gencpp)
+add_dependencies(joint_driver tm_cab_gencpp)
 
 add_library( ForceSensor src/ForceSensor/tm_force_sensor.cpp)
 
 add_executable(force_sensor src/force_sensor.cpp)
 target_link_libraries(force_sensor ${catkin_LIBRARIES} ForceSensor mccusb  m  hidapi-libusb usb-1.0 rt)
-add_dependencies(force_sensor beginner_tutorials_gencpp)
+add_dependencies(force_sensor tm_cab_gencpp)
 
 add_executable(Controller src/Controller.cpp)
 target_link_libraries(Controller ${catkin_LIBRARIES} rt)
-add_dependencies(Controller beginner_tutorials_gencpp)
+add_dependencies(Controller tm_cab_gencpp)
 
 add_executable(joint_tray_interp src/joint_tray_interp.cpp)
 target_link_libraries(joint_tray_interp ${catkin_LIBRARIES} rt)
-add_dependencies(joint_tray_interp beginner_tutorials_gencpp)
+add_dependencies(joint_tray_interp tm_cab_gencpp)

@@ -46,27 +46,27 @@ using namespace boost::interprocess;
 
 #include "DriverFsm/SysClk.h"
 
-#include "beginner_tutorials/POS_CART.h"
+#include "tm_cab/POS_CART.h"
 
-#include "beginner_tutorials/POS_REF.h"
+#include "tm_cab/POS_REF.h"
 
-#include "beginner_tutorials/PTP_TM_CTL.h"
+#include "tm_cab/PTP_TM_CTL.h"
 
-#include "beginner_tutorials/START_TM_CTL.h"
+#include "tm_cab/START_TM_CTL.h"
 
-#include "beginner_tutorials/STOP_TM_CTL.h"
+#include "tm_cab/STOP_TM_CTL.h"
 
-#include "beginner_tutorials/set_par.h"
+#include "tm_cab/set_par.h"
 
-#include "beginner_tutorials/TOPIC_STATUS.h"
+#include "tm_cab/TOPIC_STATUS.h"
 
-#include "beginner_tutorials/TOPIC_VARIABLES.h"
+#include "tm_cab/TOPIC_VARIABLES.h"
 
-#include <beginner_tutorials/SYS_STATUS.h>
+#include <tm_cab/SYS_STATUS.h>
 
-#include <beginner_tutorials/CTL_MODE.h>
+#include <tm_cab/CTL_MODE.h>
 
-#include <beginner_tutorials/SELECT_CTL.h>
+#include <tm_cab/SELECT_CTL.h>
 
 #include "geometry_msgs/WrenchStamped.h"
 
@@ -125,25 +125,25 @@ false, _fForcem = false, _fPTPJnt = false, _compG = false, _idxPose = false;
 float _forceK = 0.5, _scaleK = 1;
 
 void selJntCtlOpMode(
-		beginner_tutorials::CTL_MODE::Request::_mode_type ctlMode) {
+		tm_cab::CTL_MODE::Request::_mode_type ctlMode) {
 
 	ros::NodeHandle n;
 	ros::ServiceClient client;
 
 	std::stringstream srvName;
 
-	beginner_tutorials::SELECT_CTL srv;
+	tm_cab::SELECT_CTL srv;
 
 	switch (ctlMode) {
-	case beginner_tutorials::CTL_MODE::Request::PTP:
-	case beginner_tutorials::CTL_MODE::Request::FORCE_POS:
+	case tm_cab::CTL_MODE::Request::PTP:
+	case tm_cab::CTL_MODE::Request::FORCE_POS:
 
-		srv.request.id = beginner_tutorials::SELECT_CTL::Request::POS_CTL;
+		srv.request.id = tm_cab::SELECT_CTL::Request::POS_CTL;
 
 		break;
 	default:
 
-		srv.request.id = beginner_tutorials::SELECT_CTL::Request::POS_CTL;
+		srv.request.id = tm_cab::SELECT_CTL::Request::POS_CTL;
 
 		break;
 	}
@@ -154,7 +154,7 @@ void selJntCtlOpMode(
 
 		srvName << "/joint_" << i << "_select_Ctl";
 
-		client = n.serviceClient<beginner_tutorials::SELECT_CTL>(srvName.str());
+		client = n.serviceClient<tm_cab::SELECT_CTL>(srvName.str());
 
 		if (client.call(srv)) {
 
@@ -171,7 +171,7 @@ void selJntCtlOpMode(
 
 bool setJointRef(const int jointNum, const float jointValue) {
 
-	beginner_tutorials::POS_REF posMsg;
+	tm_cab::POS_REF posMsg;
 
 	posMsg.q_D = jointValue;
 
@@ -251,7 +251,7 @@ void ForceCallback(const geometry_msgs::WrenchStamped & msg) {
 
 }
 
-void Joint1VarsCallback(const beginner_tutorials::TOPIC_VARIABLES & msg) {
+void Joint1VarsCallback(const tm_cab::TOPIC_VARIABLES & msg) {
 
 	//_qMeas(0) = msg.q;
 
@@ -259,28 +259,28 @@ void Joint1VarsCallback(const beginner_tutorials::TOPIC_VARIABLES & msg) {
 
 }
 
-void Joint2VarsCallback(const beginner_tutorials::TOPIC_VARIABLES& msg) {
+void Joint2VarsCallback(const tm_cab::TOPIC_VARIABLES& msg) {
 
 	//_qMeas(1) = msg.q;
 	//_fQ2m = true;
 
 }
 
-void Joint3VarsCallback(const beginner_tutorials::TOPIC_VARIABLES& msg) {
+void Joint3VarsCallback(const tm_cab::TOPIC_VARIABLES& msg) {
 
 	//_qMeas(2) = msg.q;
 	//_fQ3m = true;
 
 }
 
-bool TM_SetMode(beginner_tutorials::CTL_MODE::Request &req,
-		beginner_tutorials::CTL_MODE::Response &res) {
+bool TM_SetMode(tm_cab::CTL_MODE::Request &req,
+		tm_cab::CTL_MODE::Response &res) {
 
-	if (req.mode == beginner_tutorials::CTL_MODE::Request::PTP) {
+	if (req.mode == tm_cab::CTL_MODE::Request::PTP) {
 
 		_mode = PTP;
 	}
-	if (req.mode == beginner_tutorials::CTL_MODE::Request::FORCE_POS) {
+	if (req.mode == tm_cab::CTL_MODE::Request::FORCE_POS) {
 
 		_mode = FORCE_POS;
 
@@ -296,8 +296,8 @@ bool TM_SetMode(beginner_tutorials::CTL_MODE::Request &req,
 	return true;
 }
 
-bool TM_SetFPosKP(beginner_tutorials::set_par::Request &req,
-		beginner_tutorials::set_par::Response &res) {
+bool TM_SetFPosKP(tm_cab::set_par::Request &req,
+		tm_cab::set_par::Response &res) {
 
 	_forceK = req.parVal;
 
@@ -306,8 +306,8 @@ bool TM_SetFPosKP(beginner_tutorials::set_par::Request &req,
 	return true;
 }
 
-bool TM_SetScalingK(beginner_tutorials::set_par::Request &req,
-		beginner_tutorials::set_par::Response &res) {
+bool TM_SetScalingK(tm_cab::set_par::Request &req,
+		tm_cab::set_par::Response &res) {
 
 	_scaleK = req.parVal;
 
@@ -316,10 +316,10 @@ bool TM_SetScalingK(beginner_tutorials::set_par::Request &req,
 	return true;
 }
 
-bool TM_Ptp(beginner_tutorials::PTP_TM_CTL::Request &req,
-		beginner_tutorials::PTP_TM_CTL::Response &res) {
+bool TM_Ptp(tm_cab::PTP_TM_CTL::Request &req,
+		tm_cab::PTP_TM_CTL::Response &res) {
 
-	if (req.mode == beginner_tutorials::PTP_TM_CTL::Request::PTP_CART) {
+	if (req.mode == tm_cab::PTP_TM_CTL::Request::PTP_CART) {
 
 		_posDes.translation() = Eigen::Vector3d(req.Xd, req.Yd, req.Zd);
 
@@ -327,7 +327,7 @@ bool TM_Ptp(beginner_tutorials::PTP_TM_CTL::Request &req,
 
 		_fPTPJnt = false;
 
-	} else if (req.mode == beginner_tutorials::PTP_TM_CTL::Request::PTP_JNT) {
+	} else if (req.mode == tm_cab::PTP_TM_CTL::Request::PTP_JNT) {
 
 		_qDes = Eigen::Vector3d(req.Xd, req.Yd, req.Zd);
 
@@ -713,7 +713,7 @@ int main(int argc, char **argv) {
 	qFake = Eigen::Vector3d(0, 0, 0);
 
 	geometry_msgs::PoseStamped meas_pose_Msg;
-	beginner_tutorials::POS_REF refMsg;
+	tm_cab::POS_REF refMsg;
 	sensor_msgs::JointState fakeJntMsg;
 
 	moveit_msgs::DisplayRobotState rStateMsg;
@@ -737,9 +737,9 @@ int main(int argc, char **argv) {
 	ros::Publisher desPosP = m.advertise<geometry_msgs::PoseStamped>(
 			"sys_des_pose", 100);
 
-	ros::Publisher gCompQ2P = m.advertise<beginner_tutorials::POS_REF>(
+	ros::Publisher gCompQ2P = m.advertise<tm_cab::POS_REF>(
 			"/joint_2_g_comp_effort", 100);
-	ros::Publisher gCompQ3P = m.advertise<beginner_tutorials::POS_REF>(
+	ros::Publisher gCompQ3P = m.advertise<tm_cab::POS_REF>(
 			"/joint_3_g_comp_effort", 100);
 
 	ros::Publisher forceWP = m.advertise<geometry_msgs::WrenchStamped>(
@@ -754,9 +754,9 @@ int main(int argc, char **argv) {
 
 	ros::Publisher gTipP = m.advertise<geometry_msgs::Vector3>("/g_tip", 100);
 
-	_refQ1P = m.advertise<beginner_tutorials::POS_REF>("/joint_1_pos_ref", 100);
-	_refQ2P = m.advertise<beginner_tutorials::POS_REF>("/joint_2_pos_ref", 100);
-	_refQ3P = m.advertise<beginner_tutorials::POS_REF>("/joint_3_pos_ref", 100);
+	_refQ1P = m.advertise<tm_cab::POS_REF>("/joint_1_pos_ref", 100);
+	_refQ2P = m.advertise<tm_cab::POS_REF>("/joint_2_pos_ref", 100);
+	_refQ3P = m.advertise<tm_cab::POS_REF>("/joint_3_pos_ref", 100);
 
 	ros::ServiceServer srvSetCtlMode = m.advertiseService("tm_ctl_set_mode",
 			TM_SetMode);

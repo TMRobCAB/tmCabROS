@@ -5,8 +5,8 @@
  *      Author: l_vis
  */
 
-#ifndef BEGINNER_TUTORIALS_SRC_SFLASH_SFLASH_H_
-#define BEGINNER_TUTORIALS_SRC_SFLASH_SFLASH_H_
+#ifndef TM_CAB_SRC_SFLASH_SFLASH_H_
+#define TM_CAB_SRC_SFLASH_SFLASH_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -23,4 +23,4 @@
 
 int32_t UpdateJointFlash(int32_t argc, char **argv);
 
-#endif /* BEGINNER_TUTORIALS_SRC_SFLASH_SFLASH_H_ */
+#endif /* TM_CAB_SRC_SFLASH_SFLASH_H_ */

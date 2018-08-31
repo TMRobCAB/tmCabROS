@@ -5,8 +5,8 @@
  *      Author: l_vis
  */
 
-#ifndef BEGINNER_TUTORIALS_SRC_MSG_SHARED_HPP_
-#define BEGINNER_TUTORIALS_SRC_MSG_SHARED_HPP_
+#ifndef TM_CAB_SRC_MSG_SHARED_HPP_
+#define TM_CAB_SRC_MSG_SHARED_HPP_
 
 #include <boost/interprocess/sync/interprocess_mutex.hpp>
 
@@ -46,4 +46,4 @@ struct force_shared
    bool newSample;
 };
 
-#endif /* BEGINNER_TUTORIALS_SRC_MSG_SHARED_HPP_ */
+#endif /* TM_CAB_SRC_MSG_SHARED_HPP_ */

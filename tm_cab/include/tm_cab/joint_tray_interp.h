@@ -16,11 +16,11 @@
 
 #include "ros/ros.h"
 
-#include "beginner_tutorials/POS_REF.h"
+#include "tm_cab/POS_REF.h"
 
-#include "beginner_tutorials/SYS_STATUS.h"
+#include "tm_cab/SYS_STATUS.h"
 
-#include <beginner_tutorials/jnt_traj.h>
+#include <tm_cab/jnt_traj.h>
 
 #include <math.h>
 
@@ -54,10 +54,10 @@ public:
 
 	;
 
-	bool ExeTraj(beginner_tutorials::jnt_traj::Request &req,
-			beginner_tutorials::jnt_traj::Response &res);
+	bool ExeTraj(tm_cab::jnt_traj::Request &req,
+			tm_cab::jnt_traj::Response &res);
 
-	void sysStatusCallback(const beginner_tutorials::SYS_STATUS & msg);
+	void sysStatusCallback(const tm_cab::SYS_STATUS & msg);
 
 private:
 

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-  <name>beginner_tutorials</name>
+  <name>tm_cab</name>
   <version>0.0.1</version>
-  <description>The beginner_tutorials package</description>
+  <description>The tm_cab package</description>
 
   <maintainer email="claus.smitt@gmail.com">l_vis</maintainer>
   <license>BSD</license>
@@ -11,7 +11,7 @@
   <!-- Url tags are optional, but mutiple are allowed, one per tag -->
   <!-- Optional attribute type can be: website, bugtracker, or repository -->
   <!-- Example: -->
-  <!-- <url type="website">http://wiki.ros.org/beginner_tutorials</url> -->
+  <!-- <url type="website">http://wiki.ros.org/tm_cab</url> -->
 
   <author email="claus.smitt@gmail.com">l_vise</author>
 

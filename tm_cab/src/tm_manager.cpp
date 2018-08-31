@@ -4,19 +4,19 @@
 
 #include <sstream>
 
-#include <beginner_tutorials/SYS_STATUS.h>
+#include <tm_cab/SYS_STATUS.h>
 
-#include <beginner_tutorials/START_TM_CTL.h>
+#include <tm_cab/START_TM_CTL.h>
 
-#include <beginner_tutorials/STOP_TM_CTL.h>
+#include <tm_cab/STOP_TM_CTL.h>
 
-#include <beginner_tutorials/TOPIC_STATUS.h>
+#include <tm_cab/TOPIC_STATUS.h>
 
-#include <beginner_tutorials/SAFE_STATE.h>
+#include <tm_cab/SAFE_STATE.h>
 
 #define TIMEOUT_START_RUN	0.5f
 
-using namespace beginner_tutorials;
+using namespace tm_cab;
 
 TOPIC_STATUS _jntStatus[3];
 
@@ -107,15 +107,15 @@ void RstFSM(void) {
 	_runPub.publish(runMsg);
 }
 
-void Joint1StatusCallback(const beginner_tutorials::TOPIC_STATUS & msg) {
+void Joint1StatusCallback(const tm_cab::TOPIC_STATUS & msg) {
 	_jntStatus[0] = msg;
 }
 
-void Joint2StatusCallback(const beginner_tutorials::TOPIC_STATUS & msg) {
+void Joint2StatusCallback(const tm_cab::TOPIC_STATUS & msg) {
 	_jntStatus[1] = msg;
 }
 
-void Joint3StatusCallback(const beginner_tutorials::TOPIC_STATUS & msg) {
+void Joint3StatusCallback(const tm_cab::TOPIC_STATUS & msg) {
 	_jntStatus[2] = msg;
 }
 
@@ -223,11 +223,11 @@ void RunLoopTM(ros::NodeHandle nodeH) {
 			_tmState = RESTORE_SAFE;
 
 		} else if ((_jntStatus[0].status
-						!= beginner_tutorials::TOPIC_STATUS::S_RUNNING
+						!= tm_cab::TOPIC_STATUS::S_RUNNING
 				|| _jntStatus[1].status
-						!= beginner_tutorials::TOPIC_STATUS::S_RUNNING
+						!= tm_cab::TOPIC_STATUS::S_RUNNING
 				|| _jntStatus[2].status
-						!= beginner_tutorials::TOPIC_STATUS::S_RUNNING)
+						!= tm_cab::TOPIC_STATUS::S_RUNNING)
 						&& ros::Time::now() - _tStartRun > _tOutStartRun) {
 
 			_stopSrv.shutdown();

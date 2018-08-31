@@ -11,12 +11,12 @@
 
 
 	<node name="tm_manager" 
-          pkg="beginner_tutorials" type="tm_manager" output="screen" >
+          pkg="tm_cab" type="tm_manager" output="screen" >
 	
     </node>
 
 	<node name="controller" 
-          pkg="beginner_tutorials" type="Controller" output="screen" >
+          pkg="tm_cab" type="Controller" output="screen" >
 	
 	<rosparam param="fMass">[0.0186, 0.0004, 0, -0.0005, 0.0481, 0, -0.0008, 0.0033, 0]</rosparam>
 
@@ -27,7 +27,7 @@
     </node>
 
     <node name="joint_1" 
-          pkg="beginner_tutorials" type="joint_driver" output="screen" respawn="true">
+          pkg="tm_cab" type="joint_driver" output="screen" respawn="true">
 
       <param name=  "port_name" type="string" value="/dev/ttyS1" />
       <param name=  "q_offset" type="double" value="-0.44" />
@@ -57,7 +57,7 @@
     </node>
 
     <node name="joint_2" 
-          pkg="beginner_tutorials" type="joint_driver" output="screen" respawn="true">
+          pkg="tm_cab" type="joint_driver" output="screen" respawn="true">
 
       <param name= "port_name" type="string" value="/dev/ttyS0" />
 	  <param name=  "q_offset" type="double" value="-1.63" /> <!--0.08-->
@@ -87,7 +87,7 @@
     </node>   
 
 	<node name="joint_3" 
-          pkg="beginner_tutorials" type="joint_driver" output="screen" respawn="true">
+          pkg="tm_cab" type="joint_driver" output="screen" respawn="true">
 
       <param name=  "port_name" type="string" value="/dev/ttyS3" />
       <param name=  "q_offset" type="double" value="0.05" />
@@ -117,13 +117,13 @@
     </node>
 
 	<node name="force_sensor" 
-          pkg="beginner_tutorials" type="force_sensor" output="screen">
+          pkg="tm_cab" type="force_sensor" output="screen">
           <param name=  "dbForce" type="double" value="0" />
     
     </node>
     
     <node name="joint_tray_interp" 
-          pkg="beginner_tutorials" type="joint_tray_interp" output="screen">
+          pkg="tm_cab" type="joint_tray_interp" output="screen">
     
     </node>
 	

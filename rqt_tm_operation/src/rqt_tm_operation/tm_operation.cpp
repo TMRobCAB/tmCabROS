@@ -60,8 +60,8 @@ void TmOperation::initPlugin(qt_gui_cpp::PluginContext& context) {
 	}
 	context.addWidget(widget_);
 
-	qRegisterMetaType<beginner_tutorials::SYS_STATUS>(
-			"beginner_tutorials::SYS_STATUS");
+	qRegisterMetaType<tm_cab::SYS_STATUS>(
+			"tm_cab::SYS_STATUS");
 
 	ros::NodeHandle n = getNodeHandle();
 
@@ -69,9 +69,9 @@ void TmOperation::initPlugin(qt_gui_cpp::PluginContext& context) {
 			this);
 
 	connect(this,
-			SIGNAL(processStatusUpdate(const beginner_tutorials::SYS_STATUS&)),
+			SIGNAL(processStatusUpdate(const tm_cab::SYS_STATUS&)),
 			this,
-			SLOT(sysStatusUpdated(const beginner_tutorials::SYS_STATUS&)));
+			SLOT(sysStatusUpdated(const tm_cab::SYS_STATUS&)));
 
 	// TM Parameters Tab Initialization
 	//////////////////////////////////////////////
@@ -198,7 +198,7 @@ void TmOperation::ackSafety() {
 	ros::ServiceClient client;
 
 	stringstream srvName;
-	beginner_tutorials::SAFE_STATE srv;
+	tm_cab::SAFE_STATE srv;
 
 	int _jointNum = ui_.j_sel_comboBox->currentIndex();
 
@@ -210,7 +210,7 @@ void TmOperation::ackSafety() {
 		srvName.str("");
 		srvName << "/joint_" << i << "_set_safe";
 
-		client = getNodeHandle().serviceClient<beginner_tutorials::SAFE_STATE>(
+		client = getNodeHandle().serviceClient<tm_cab::SAFE_STATE>(
 				srvName.str());
 
 		if (client.call(srv)) {
@@ -263,21 +263,21 @@ void TmOperation::setSafety() {
 
 		srvName << "/joint_" << i << "_select_Ctl";
 
-		client = n.serviceClient<beginner_tutorials::SELECT_CTL>(srvName.str());
+		client = n.serviceClient<tm_cab::SELECT_CTL>(srvName.str());
 
-		beginner_tutorials::SELECT_CTL selSrv;
+		tm_cab::SELECT_CTL selSrv;
 
 		if (ctlName.contains("Pos"))
 			selSrv.request.id =
-					beginner_tutorials::SELECT_CTL::Request::POS_CTL;
+					tm_cab::SELECT_CTL::Request::POS_CTL;
 
 		else if (ctlName.contains("Speed"))
 			selSrv.request.id =
-					beginner_tutorials::SELECT_CTL::Request::SPEED_CTL;
+					tm_cab::SELECT_CTL::Request::SPEED_CTL;
 
 		else if (ctlName.contains("Force"))
 			selSrv.request.id =
-					beginner_tutorials::SELECT_CTL::Request::FORCE_CTL;
+					tm_cab::SELECT_CTL::Request::FORCE_CTL;
 
 		else if (ctlName.contains("Curr")) {
 
@@ -286,11 +286,11 @@ void TmOperation::setSafety() {
 			return;
 		} else if (ctlName.contains("Break"))
 			selSrv.request.id =
-					beginner_tutorials::SELECT_CTL::Request::BREAK_CTL;
+					tm_cab::SELECT_CTL::Request::BREAK_CTL;
 
 		else if (ctlName.contains("Idx"))
 			selSrv.request.id =
-					beginner_tutorials::SELECT_CTL::Request::IDX_CTL;
+					tm_cab::SELECT_CTL::Request::IDX_CTL;
 
 		if (client.call(selSrv)) {
 
@@ -311,10 +311,10 @@ void TmOperation::setSafety() {
 
 		if (safeName.compare("Position") == 0) {
 
-			beginner_tutorials::SAFE_POS srv;
+			tm_cab::SAFE_POS srv;
 			srvName << "/joint_" << i << "_set_safe_Pos";
 
-			client = n.serviceClient<beginner_tutorials::SAFE_POS>(
+			client = n.serviceClient<tm_cab::SAFE_POS>(
 					srvName.str());
 
 			srv.request.maxPos = atof(maxVal.data());
@@ -329,10 +329,10 @@ void TmOperation::setSafety() {
 
 		} else if (safeName.compare("Position e") == 0) {
 
-			beginner_tutorials::SAFE_POS_E srv;
+			tm_cab::SAFE_POS_E srv;
 			srvName << "/joint_" << i << "_set_safe_Pos_E";
 
-			client = n.serviceClient<beginner_tutorials::SAFE_POS_E>(
+			client = n.serviceClient<tm_cab::SAFE_POS_E>(
 					srvName.str());
 
 			srv.request.SPEM = atof(maxVal.data());
@@ -347,10 +347,10 @@ void TmOperation::setSafety() {
 
 		} else if (safeName.compare("Speed") == 0) {
 
-			beginner_tutorials::SAFE_SPEED srv;
+			tm_cab::SAFE_SPEED srv;
 			srvName << "/joint_" << i << "_set_safe_Speed";
 
-			client = n.serviceClient<beginner_tutorials::SAFE_SPEED>(
+			client = n.serviceClient<tm_cab::SAFE_SPEED>(
 					srvName.str());
 
 			srv.request.maxS = atof(maxVal.data());
@@ -365,10 +365,10 @@ void TmOperation::setSafety() {
 
 		} else if (safeName.compare("Speed e") == 0) {
 
-			beginner_tutorials::SAFE_SPEED srv;
+			tm_cab::SAFE_SPEED srv;
 			srvName << "/joint_" << i << "_set_safe_Speed_E";
 
-			client = n.serviceClient<beginner_tutorials::SAFE_SPEED>(
+			client = n.serviceClient<tm_cab::SAFE_SPEED>(
 					srvName.str());
 
 			srv.request.maxS = atof(maxVal.data());
@@ -383,10 +383,10 @@ void TmOperation::setSafety() {
 
 		} else if (safeName.compare("PWM") == 0) {
 
-			beginner_tutorials::SAFE_PWM srv;
+			tm_cab::SAFE_PWM srv;
 			srvName << "/joint_" << i << "_set_safe_PWM";
 
-			client = n.serviceClient<beginner_tutorials::SAFE_PWM>(
+			client = n.serviceClient<tm_cab::SAFE_PWM>(
 					srvName.str());
 
 			srv.request.maxP = atof(maxVal.data());
@@ -401,10 +401,10 @@ void TmOperation::setSafety() {
 
 		} else if (safeName.compare("Current") == 0) {
 
-			beginner_tutorials::SAFE_CURR srv;
+			tm_cab::SAFE_CURR srv;
 			srvName << "/joint_" << i << "_set_safe_curr";
 
-			client = n.serviceClient<beginner_tutorials::SAFE_CURR>(
+			client = n.serviceClient<tm_cab::SAFE_CURR>(
 					srvName.str());
 
 			srv.request.maxC = atof(maxVal.data());
@@ -425,10 +425,10 @@ void TmOperation::setSafety() {
 
 		} else if (safeName.compare("Force") == 0) {
 
-			beginner_tutorials::SAFE_FORCE srv;
+			tm_cab::SAFE_FORCE srv;
 			srvName << "/joint_" << i << "_set_safe_force";
 
-			client = n.serviceClient<beginner_tutorials::SAFE_FORCE>(
+			client = n.serviceClient<tm_cab::SAFE_FORCE>(
 					srvName.str());
 
 			srv.request.maxF = atof(maxVal.data());
@@ -480,11 +480,11 @@ void TmOperation::setCtlPars() {
 
 	stringstream srvName;
 
-	beginner_tutorials::SELECT_CTL selSrv;
-	beginner_tutorials::SET_SYS_FS fsSrv;
-	beginner_tutorials::SET_INTER interSrv;
-	beginner_tutorials::SET_PAR_PID pidSrv;
-	beginner_tutorials::set_pwm_pars pwmSrv;
+	tm_cab::SELECT_CTL selSrv;
+	tm_cab::SET_SYS_FS fsSrv;
+	tm_cab::SET_INTER interSrv;
+	tm_cab::SET_PAR_PID pidSrv;
+	tm_cab::set_pwm_pars pwmSrv;
 
 	string parValue;
 
@@ -503,7 +503,7 @@ void TmOperation::setCtlPars() {
 
 			srvName << "/joint_" << i << "_set_sys_FS";
 
-			client = n.serviceClient<beginner_tutorials::SET_SYS_FS>(
+			client = n.serviceClient<tm_cab::SET_SYS_FS>(
 					srvName.str());
 
 			parValue = ui_.fs_plainTextEdit->toPlainText().toStdString();
@@ -533,11 +533,11 @@ void TmOperation::setCtlPars() {
 
 			srvName << "/joint_" << i << "_select_Ctl";
 
-			client = n.serviceClient<beginner_tutorials::SELECT_CTL>(
+			client = n.serviceClient<tm_cab::SELECT_CTL>(
 					srvName.str());
 
 			selSrv.request.id =
-					beginner_tutorials::SELECT_CTL::Request::BREAK_CTL;
+					tm_cab::SELECT_CTL::Request::BREAK_CTL;
 
 			if (client.call(selSrv)) {
 
@@ -557,7 +557,7 @@ void TmOperation::setCtlPars() {
 
 			srvName << "/joint_" << i << "_set_inter";
 
-			client = n.serviceClient<beginner_tutorials::SET_INTER>(
+			client = n.serviceClient<tm_cab::SET_INTER>(
 					srvName.str());
 
 			parValue = ui_.t_change_plainTextEdit->toPlainText().toStdString();
@@ -572,11 +572,11 @@ void TmOperation::setCtlPars() {
 
 			if (ui_.int_fun_comboBox->currentText().contains("Linear"))
 				interSrv.request.id =
-						beginner_tutorials::SET_INTER::Request::FLIN;
+						tm_cab::SET_INTER::Request::FLIN;
 
 			else if (ui_.int_fun_comboBox->currentText().contains("Arc"))
 				interSrv.request.id =
-						beginner_tutorials::SET_INTER::Request::FARC;
+						tm_cab::SET_INTER::Request::FARC;
 
 			if (client.call(interSrv)) {
 
@@ -595,7 +595,7 @@ void TmOperation::setCtlPars() {
 
 			srvName << "/joint_" << i << "_set_PWM_pars";
 
-			client = n.serviceClient<beginner_tutorials::set_pwm_pars>(
+			client = n.serviceClient<tm_cab::set_pwm_pars>(
 					srvName.str());
 
 			if (ui_.db_pos_plainTextEdit->toPlainText().isEmpty()) {
@@ -680,44 +680,44 @@ void TmOperation::setCtlPars() {
 			if (ui_.ctl_pars_comboBox->currentText().contains("Pos")) {
 
 				pidSrv.request.pid_id =
-						beginner_tutorials::SET_PAR_PID::Request::POS_PID;
+						tm_cab::SET_PAR_PID::Request::POS_PID;
 
 				selSrv.request.id =
-						beginner_tutorials::SELECT_CTL::Request::POS_CTL;
+						tm_cab::SELECT_CTL::Request::POS_CTL;
 			} else if (ui_.ctl_pars_comboBox->currentText().contains("Speed")) {
 
 				pidSrv.request.pid_id =
-						beginner_tutorials::SET_PAR_PID::Request::SPEED_PID;
+						tm_cab::SET_PAR_PID::Request::SPEED_PID;
 
 				selSrv.request.id =
-						beginner_tutorials::SELECT_CTL::Request::SPEED_CTL;
+						tm_cab::SELECT_CTL::Request::SPEED_CTL;
 			} else if (ui_.ctl_pars_comboBox->currentText().contains("Force")) {
 
 				pidSrv.request.pid_id =
-						beginner_tutorials::SET_PAR_PID::Request::FORCE_PID;
+						tm_cab::SET_PAR_PID::Request::FORCE_PID;
 
 				selSrv.request.id =
-						beginner_tutorials::SELECT_CTL::Request::FORCE_CTL;
+						tm_cab::SELECT_CTL::Request::FORCE_CTL;
 			} else if (ui_.ctl_pars_comboBox->currentText().contains("Break")) {
 
 				pidSrv.request.pid_id =
-						beginner_tutorials::SET_PAR_PID::Request::BREAK_PID;
+						tm_cab::SET_PAR_PID::Request::BREAK_PID;
 
 				selSrv.request.id =
-						beginner_tutorials::SELECT_CTL::Request::BREAK_CTL;
+						tm_cab::SELECT_CTL::Request::BREAK_CTL;
 			} else if (ui_.ctl_pars_comboBox->currentText().contains("Index")) {
 
 				pidSrv.request.pid_id =
-						beginner_tutorials::SET_PAR_PID::Request::IDX_PID;
+						tm_cab::SET_PAR_PID::Request::IDX_PID;
 
 				selSrv.request.id =
-						beginner_tutorials::SELECT_CTL::Request::IDX_CTL;
+						tm_cab::SELECT_CTL::Request::IDX_CTL;
 
 			}
 
 			srvName << "/joint_" << i << "_select_Ctl";
 
-			client = n.serviceClient<beginner_tutorials::SELECT_CTL>(
+			client = n.serviceClient<tm_cab::SELECT_CTL>(
 					srvName.str());
 
 			if (client.call(selSrv)) {
@@ -738,13 +738,13 @@ void TmOperation::setCtlPars() {
 
 			srvName << "/joint_" << i << "_set_par_pid";
 
-			client = n.serviceClient<beginner_tutorials::SET_PAR_PID>(
+			client = n.serviceClient<tm_cab::SET_PAR_PID>(
 					srvName.str());
 
 			if (!ui_.kp_plainTextEdit->toPlainText().isEmpty()) {
 
 				pidSrv.request.par_id =
-						beginner_tutorials::SET_PAR_PID::Request::KP;
+						tm_cab::SET_PAR_PID::Request::KP;
 
 				parValue = ui_.kp_plainTextEdit->toPlainText().toStdString();
 
@@ -775,7 +775,7 @@ void TmOperation::setCtlPars() {
 			if (!ui_.ki_plainTextEdit->toPlainText().isEmpty()) {
 
 				pidSrv.request.par_id =
-						beginner_tutorials::SET_PAR_PID::Request::KI;
+						tm_cab::SET_PAR_PID::Request::KI;
 
 				parValue = ui_.ki_plainTextEdit->toPlainText().toStdString();
 
@@ -806,7 +806,7 @@ void TmOperation::setCtlPars() {
 			if (!ui_.kd_plainTextEdit->toPlainText().isEmpty()) {
 
 				pidSrv.request.par_id =
-						beginner_tutorials::SET_PAR_PID::Request::KD;
+						tm_cab::SET_PAR_PID::Request::KD;
 
 				parValue = ui_.kd_plainTextEdit->toPlainText().toStdString();
 
@@ -837,7 +837,7 @@ void TmOperation::setCtlPars() {
 			if (!ui_.isat_plainTextEdit->toPlainText().isEmpty()) {
 
 				pidSrv.request.par_id =
-						beginner_tutorials::SET_PAR_PID::Request::ISAT;
+						tm_cab::SET_PAR_PID::Request::ISAT;
 
 				parValue = ui_.isat_plainTextEdit->toPlainText().toStdString();
 
@@ -868,7 +868,7 @@ void TmOperation::setCtlPars() {
 			if (!ui_.sat_plainTextEdit->toPlainText().isEmpty()) {
 
 				pidSrv.request.par_id =
-						beginner_tutorials::SET_PAR_PID::Request::SAT;
+						tm_cab::SET_PAR_PID::Request::SAT;
 
 				parValue = ui_.sat_plainTextEdit->toPlainText().toStdString();
 
@@ -962,9 +962,9 @@ void TmOperation::toggelIndex() {
 		srvName.str("");
 		srvName << "/joint_" << jNum << "_start";
 
-		client = n.serviceClient<beginner_tutorials::START>(srvName.str());
+		client = n.serviceClient<tm_cab::START>(srvName.str());
 
-		beginner_tutorials::START startSrv;
+		tm_cab::START startSrv;
 
 		if (client.call(startSrv)) {
 
@@ -985,9 +985,9 @@ void TmOperation::toggelIndex() {
 
 		client.shutdown();
 
-		client = n.serviceClient<beginner_tutorials::STOP>(srvName.str());
+		client = n.serviceClient<tm_cab::STOP>(srvName.str());
 
-		beginner_tutorials::STOP stopSrv;
+		tm_cab::STOP stopSrv;
 
 		if (client.call(stopSrv)) {
 
@@ -1018,9 +1018,9 @@ void TmOperation::toggelIndexPosRef() {
 	pubName.clear();
 	pubName << "/joint_" << jointIdxRunning_ << "_pos_ref";
 
-	posRefPub_ = n.advertise<beginner_tutorials::POS_REF>(pubName.str(), 1000);
+	posRefPub_ = n.advertise<tm_cab::POS_REF>(pubName.str(), 1000);
 
-	beginner_tutorials::POS_REF refMsg;
+	tm_cab::POS_REF refMsg;
 
 	if (ui_.p_idx_ref_pushButton->isDown())
 		refMsg.q_D = 1;
@@ -1042,9 +1042,9 @@ void TmOperation::toggelIndexNegRef() {
 	pubName.clear();
 	pubName << "/joint_" << jointIdxRunning_ << "_pos_ref";
 
-	posRefPub_ = n.advertise<beginner_tutorials::POS_REF>(pubName.str(), 1000);
+	posRefPub_ = n.advertise<tm_cab::POS_REF>(pubName.str(), 1000);
 
-	beginner_tutorials::POS_REF refMsg;
+	tm_cab::POS_REF refMsg;
 
 	if (ui_.n_idx_ref_pushButton->isDown())
 		refMsg.q_D = -1;
@@ -1078,10 +1078,10 @@ void TmOperation::toggelOperation() {
 
 		srvName << "/start_ctl";
 
-		client = n.serviceClient<beginner_tutorials::START_TM_CTL>(
+		client = n.serviceClient<tm_cab::START_TM_CTL>(
 				srvName.str());
 
-		beginner_tutorials::START_TM_CTL startSrv;
+		tm_cab::START_TM_CTL startSrv;
 
 		if (client.call(startSrv)) {
 
@@ -1100,10 +1100,10 @@ void TmOperation::toggelOperation() {
 
 		srvName << "/stop_ctl";
 
-		client = n.serviceClient<beginner_tutorials::STOP_TM_CTL>(
+		client = n.serviceClient<tm_cab::STOP_TM_CTL>(
 				srvName.str());
 
-		beginner_tutorials::STOP_TM_CTL stopSrv;
+		tm_cab::STOP_TM_CTL stopSrv;
 
 		if (client.call(stopSrv)) {
 
@@ -1127,32 +1127,32 @@ void TmOperation::selOpMode() {
 
 	ros::NodeHandle n = getNodeHandle();
 
-	beginner_tutorials::SELECT_CTL selSrv;
+	tm_cab::SELECT_CTL selSrv;
 
 	ros::ServiceClient client;
 
 	QWidget * opModeWidget;
 
-	beginner_tutorials::CTL_MODE srv;
+	tm_cab::CTL_MODE srv;
 
 	if (ui_.op_mode_comboBox->currentText().contains("PTP")) {
 
-		selSrv.request.id = beginner_tutorials::SELECT_CTL::Request::POS_CTL;
+		selSrv.request.id = tm_cab::SELECT_CTL::Request::POS_CTL;
 
-		srv.request.mode = beginner_tutorials::CTL_MODE::Request::PTP;
+		srv.request.mode = tm_cab::CTL_MODE::Request::PTP;
 
 		opModeWidget = ui_.ptp_page;
 	} else if (ui_.op_mode_comboBox->currentText().contains("Force - Pos")) {
 
-		selSrv.request.id = beginner_tutorials::SELECT_CTL::Request::POS_CTL;
+		selSrv.request.id = tm_cab::SELECT_CTL::Request::POS_CTL;
 
-		srv.request.mode = beginner_tutorials::CTL_MODE::Request::FORCE_POS;
+		srv.request.mode = tm_cab::CTL_MODE::Request::FORCE_POS;
 		srv.request.force_k = 0.1;
 
 		opModeWidget = ui_.f_pos_page;
 	} else if (ui_.op_mode_comboBox->currentText().contains("Joint Traj")) {
 
-		selSrv.request.id = beginner_tutorials::SELECT_CTL::Request::SPEED_CTL;
+		selSrv.request.id = tm_cab::SELECT_CTL::Request::SPEED_CTL;
 
 		opModeWidget = ui_.jnt_traj_page;
 	}
@@ -1165,7 +1165,7 @@ void TmOperation::selOpMode() {
 
 		srvName << "/joint_" << i << "_select_Ctl";
 
-		client = n.serviceClient<beginner_tutorials::SELECT_CTL>(srvName.str());
+		client = n.serviceClient<tm_cab::SELECT_CTL>(srvName.str());
 
 		if (client.call(selSrv)) {
 
@@ -1186,7 +1186,7 @@ void TmOperation::selOpMode() {
 
 	jntCtlSelected_ = true;
 
-	client = n.serviceClient<beginner_tutorials::CTL_MODE>("/tm_ctl_set_mode");
+	client = n.serviceClient<tm_cab::CTL_MODE>("/tm_ctl_set_mode");
 
 	if (client.call(srv)) {
 
@@ -1218,12 +1218,12 @@ void TmOperation::ptpModLabels(const QString & ptpMode) {
 void TmOperation::goHome() {
 
 	ros::NodeHandle n = getNodeHandle();
-	ros::ServiceClient client = n.serviceClient<beginner_tutorials::PTP_TM_CTL>(
+	ros::ServiceClient client = n.serviceClient<tm_cab::PTP_TM_CTL>(
 			"/tm_ptp");
 
-	beginner_tutorials::PTP_TM_CTL srv;
+	tm_cab::PTP_TM_CTL srv;
 
-	srv.request.mode = beginner_tutorials::PTP_TM_CTL::Request::PTP_JNT;
+	srv.request.mode = tm_cab::PTP_TM_CTL::Request::PTP_JNT;
 
 	srv.request.Xd = 0;
 	srv.request.Yd = 1.57;
@@ -1254,15 +1254,15 @@ void TmOperation::ptpExe() {
 	}
 
 	ros::NodeHandle n = getNodeHandle();
-	ros::ServiceClient client = n.serviceClient<beginner_tutorials::PTP_TM_CTL>(
+	ros::ServiceClient client = n.serviceClient<tm_cab::PTP_TM_CTL>(
 			"/tm_ptp");
 
-	beginner_tutorials::PTP_TM_CTL srv;
+	tm_cab::PTP_TM_CTL srv;
 
 	if (ui_.ptp_mode_comboBox->currentText().contains("Cart"))
-		srv.request.mode = beginner_tutorials::PTP_TM_CTL::Request::PTP_CART;
+		srv.request.mode = tm_cab::PTP_TM_CTL::Request::PTP_CART;
 	else if (ui_.ptp_mode_comboBox->currentText().contains("Joint"))
-		srv.request.mode = beginner_tutorials::PTP_TM_CTL::Request::PTP_JNT;
+		srv.request.mode = tm_cab::PTP_TM_CTL::Request::PTP_JNT;
 
 	srv.request.Xd = atof(xDes.data());
 	srv.request.Yd = atof(yDes.data());
@@ -1291,10 +1291,10 @@ void TmOperation::updateSensK() {
 	}
 
 	ros::NodeHandle n = getNodeHandle();
-	ros::ServiceClient client = n.serviceClient<beginner_tutorials::set_par>(
+	ros::ServiceClient client = n.serviceClient<tm_cab::set_par>(
 			"/tm_set_f_pos_kp");
 
-	beginner_tutorials::set_par srv;
+	tm_cab::set_par srv;
 
 	srv.request.parVal = atof(fK.data());
 
@@ -1323,10 +1323,10 @@ void TmOperation::updateScaleK() {
 	}
 
 	ros::NodeHandle n = getNodeHandle();
-	ros::ServiceClient client = n.serviceClient<beginner_tutorials::set_par>(
+	ros::ServiceClient client = n.serviceClient<tm_cab::set_par>(
 			"/tm_set_scaling_k");
 
-	beginner_tutorials::set_par srv;
+	tm_cab::set_par srv;
 
 	srv.request.parVal = atof(fK.data());
 
@@ -1343,12 +1343,12 @@ void TmOperation::updateScaleK() {
 
 }
 
-void TmOperation::callbackSysStatus(const beginner_tutorials::SYS_STATUS& msg) {
+void TmOperation::callbackSysStatus(const tm_cab::SYS_STATUS& msg) {
 
 	processStatusUpdate(msg); // Send signal to sysStatusUpdated SLOT
 }
 
-void TmOperation::sysStatusUpdated(const beginner_tutorials::SYS_STATUS& msg) {
+void TmOperation::sysStatusUpdated(const tm_cab::SYS_STATUS& msg) {
 
 	processSysStatus(ui_.sys_status_textBrowser, msg);
 
@@ -1362,11 +1362,11 @@ void TmOperation::sysStatusUpdated(const beginner_tutorials::SYS_STATUS& msg) {
 	processJointStatus(ui_.j3_stat_textBrowser, msg.j3_stat);
 
 	if (!sysRunning_
-			&& msg.sys_status == beginner_tutorials::SYS_STATUS::RUNNING)
+			&& msg.sys_status == tm_cab::SYS_STATUS::RUNNING)
 		sysRunning_ = true;
 
 	if (sysRunning_
-			&& msg.sys_status != beginner_tutorials::SYS_STATUS::RUNNING) {
+			&& msg.sys_status != tm_cab::SYS_STATUS::RUNNING) {
 
 		toggelOperation();
 		sysRunning_ = false;
@@ -1414,24 +1414,24 @@ void TmOperation::jntTrajExe() {
 	}
 
 	ros::NodeHandle n = getNodeHandle();
-	ros::ServiceClient client = n.serviceClient<beginner_tutorials::jnt_traj>(
+	ros::ServiceClient client = n.serviceClient<tm_cab::jnt_traj>(
 			"/exe_jnt_traj");
 
-	beginner_tutorials::jnt_traj srv;
+	tm_cab::jnt_traj srv;
 
 	srv.request.nSteps = 1;
 
 	if (ui_.traj_int_type_comboBox->currentText().contains("Tg"))
-		srv.request.intType = beginner_tutorials::jnt_traj::Request::ARC_TG;
+		srv.request.intType = tm_cab::jnt_traj::Request::ARC_TG;
 
 	else if (ui_.traj_int_type_comboBox->currentText().contains("Linear"))
-		srv.request.intType = beginner_tutorials::jnt_traj::Request::LIN;
+		srv.request.intType = tm_cab::jnt_traj::Request::LIN;
 
 	if (ui_.traj_var_comboBox->currentText().contains("Speed"))
-		srv.request.varId = beginner_tutorials::jnt_traj::Request::SPEED;
+		srv.request.varId = tm_cab::jnt_traj::Request::SPEED;
 
 	else if (ui_.traj_var_comboBox->currentText().contains("PWM Steps")) {
-		srv.request.varId = beginner_tutorials::jnt_traj::Request::PWM;
+		srv.request.varId = tm_cab::jnt_traj::Request::PWM;
 
 		if (!isFloat(dPos) || nStepos.empty()) {
 
@@ -1443,7 +1443,7 @@ void TmOperation::jntTrajExe() {
 		srv.request.nSteps = atof(nStepos.data());
 
 	} else if (ui_.traj_var_comboBox->currentText().contains("PWM"))
-		srv.request.varId = beginner_tutorials::jnt_traj::Request::PWM;
+		srv.request.varId = tm_cab::jnt_traj::Request::PWM;
 
 	srv.request.jntNum = ui_.jnt_traj_comboBox->currentIndex() + 1;
 	srv.request.dPos = atof(dPos.data());
@@ -1524,7 +1524,7 @@ void TmOperation::trajVarSelected(const QString& varName) {
 }
 
 void TmOperation::processJointStatus(QTextBrowser * jointText,
-		const beginner_tutorials::SYS_STATUS::_j1_stat_type & jointStatus) {
+		const tm_cab::SYS_STATUS::_j1_stat_type & jointStatus) {
 
 	QColor redC(255, 0, 0);
 	QColor greenC(0, 255, 0);
@@ -1532,52 +1532,52 @@ void TmOperation::processJointStatus(QTextBrowser * jointText,
 	QColor yellowC(255, 255, 0);
 
 	switch (jointStatus.status) {
-	case beginner_tutorials::TOPIC_STATUS::S_IDLE:
+	case tm_cab::TOPIC_STATUS::S_IDLE:
 
 		jointText->setText("Idle");
 		jointText->setTextColor(greenC);
 		break;
-	case beginner_tutorials::TOPIC_STATUS::S_OUT_OF_SYNCH:
+	case tm_cab::TOPIC_STATUS::S_OUT_OF_SYNCH:
 
 		jointText->setText("Out of Synch");
 		jointText->setTextColor(redC);
 		break;
-	case beginner_tutorials::TOPIC_STATUS::S_RUNNING:
+	case tm_cab::TOPIC_STATUS::S_RUNNING:
 
 		jointText->setText("Running");
 		jointText->setTextColor(greenC);
 		break;
-	case beginner_tutorials::TOPIC_STATUS::S_SELECT_SCHEME:
+	case tm_cab::TOPIC_STATUS::S_SELECT_SCHEME:
 
 		jointText->setText("Selecting Scheme");
 		jointText->setTextColor(blueC);
 		break;
-	case beginner_tutorials::TOPIC_STATUS::S_SET_PAR:
+	case tm_cab::TOPIC_STATUS::S_SET_PAR:
 
 		jointText->setText("Setting Par");
 		jointText->setTextColor(blueC);
 		break;
-	case beginner_tutorials::TOPIC_STATUS::S_START_SCHEME:
+	case tm_cab::TOPIC_STATUS::S_START_SCHEME:
 
 		jointText->setText("Starting");
 		jointText->setTextColor(blueC);
 		break;
-	case beginner_tutorials::TOPIC_STATUS::S_STOP_SCHEME:
+	case tm_cab::TOPIC_STATUS::S_STOP_SCHEME:
 
 		jointText->setText("Stopping");
 		jointText->setTextColor(blueC);
 		break;
-	case beginner_tutorials::TOPIC_STATUS::S_UNINDEXED:
+	case tm_cab::TOPIC_STATUS::S_UNINDEXED:
 
 		jointText->setText("Not Indexed");
 		jointText->setTextColor(redC);
 		break;
-	case beginner_tutorials::TOPIC_STATUS::S_UNSAFE:
+	case tm_cab::TOPIC_STATUS::S_UNSAFE:
 
 		jointText->setText("UNSAFE");
 		jointText->setTextColor(redC);
 		break;
-	case beginner_tutorials::TOPIC_STATUS::S_UPDATE_SYS:
+	case tm_cab::TOPIC_STATUS::S_UPDATE_SYS:
 
 		jointText->setText("Updating");
 		jointText->setTextColor(blueC);
@@ -1588,7 +1588,7 @@ void TmOperation::processJointStatus(QTextBrowser * jointText,
 }
 
 void TmOperation::processSysStatus(QTextBrowser * sysText,
-		const beginner_tutorials::SYS_STATUS & sysStatus) {
+		const tm_cab::SYS_STATUS & sysStatus) {
 
 	QColor redC(255, 0, 0);
 	QColor greenC(0, 255, 0);
@@ -1596,37 +1596,37 @@ void TmOperation::processSysStatus(QTextBrowser * sysText,
 	QColor yellowC(255, 255, 0);
 
 	switch (sysStatus.sys_status) {
-	case beginner_tutorials::SYS_STATUS::JNTS_OUT_OF_SYNCH:
+	case tm_cab::SYS_STATUS::JNTS_OUT_OF_SYNCH:
 
 		sysText->setText("Not Synched");
 		sysText->setTextColor(redC);
 		break;
-	case beginner_tutorials::SYS_STATUS::MONITOR_BREAK:
+	case tm_cab::SYS_STATUS::MONITOR_BREAK:
 
 		sysText->setText("Breaking");
 		sysText->setTextColor(yellowC);
 		break;
-	case beginner_tutorials::SYS_STATUS::RESTORE_SAFE:
+	case tm_cab::SYS_STATUS::RESTORE_SAFE:
 
 		sysText->setText("Not Safe");
 		sysText->setTextColor(redC);
 		break;
-	case beginner_tutorials::SYS_STATUS::RUNNING:
+	case tm_cab::SYS_STATUS::RUNNING:
 
 		sysText->setText("Running");
 		sysText->setTextColor(greenC);
 		break;
-	case beginner_tutorials::SYS_STATUS::STOP_JOINTS:
+	case tm_cab::SYS_STATUS::STOP_JOINTS:
 
 		sysText->setText("Stopping");
 		sysText->setTextColor(yellowC);
 		break;
-	case beginner_tutorials::SYS_STATUS::SYS_READY:
+	case tm_cab::SYS_STATUS::SYS_READY:
 
 		sysText->setText("Sys Ready");
 		sysText->setTextColor(greenC);
 		break;
-	case beginner_tutorials::SYS_STATUS::UNINDEXED:
+	case tm_cab::SYS_STATUS::UNINDEXED:
 
 		sysText->setText("Not Indexed");
 		sysText->setTextColor(redC);

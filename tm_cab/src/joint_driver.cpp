@@ -14,43 +14,43 @@ extern "C" {
 
 #include <std_srvs/Trigger.h>
 
-#include "beginner_tutorials/AddTwoInts.h"
+#include "tm_cab/AddTwoInts.h"
 
-#include "beginner_tutorials/SAFE_CURR.h"
+#include "tm_cab/SAFE_CURR.h"
 
-#include "beginner_tutorials/SAFE_FORCE.h"
+#include "tm_cab/SAFE_FORCE.h"
 
-#include "beginner_tutorials/SAFE_POS.h"
+#include "tm_cab/SAFE_POS.h"
 
-#include "beginner_tutorials/SAFE_POS_E.h"
+#include "tm_cab/SAFE_POS_E.h"
 
-#include "beginner_tutorials/SAFE_PWM.h"
+#include "tm_cab/SAFE_PWM.h"
 
-#include "beginner_tutorials/SAFE_SPEED.h"
+#include "tm_cab/SAFE_SPEED.h"
 
-#include "beginner_tutorials/SELECT_CTL.h"
+#include "tm_cab/SELECT_CTL.h"
 
-#include "beginner_tutorials/SET_INTER.h"
+#include "tm_cab/SET_INTER.h"
 
-#include "beginner_tutorials/SAFE_STATE.h"
+#include "tm_cab/SAFE_STATE.h"
 
-#include "beginner_tutorials/SET_SYS_FS.h"
+#include "tm_cab/SET_SYS_FS.h"
 
-#include "beginner_tutorials/SET_PAR_PID.h"
+#include "tm_cab/SET_PAR_PID.h"
 
-#include "beginner_tutorials/START.h"
+#include "tm_cab/START.h"
 
-#include "beginner_tutorials/STOP.h"
+#include "tm_cab/STOP.h"
 
-#include "beginner_tutorials/POS_REF.h"
+#include "tm_cab/POS_REF.h"
 
-#include "beginner_tutorials/Num.h"
+#include "tm_cab/Num.h"
 
-#include "beginner_tutorials/set_pwm_pars.h"
+#include "tm_cab/set_pwm_pars.h"
 
-#include "beginner_tutorials/TOPIC_STATUS.h"
+#include "tm_cab/TOPIC_STATUS.h"
 
-#include "beginner_tutorials/TOPIC_VARIABLES.h"
+#include "tm_cab/TOPIC_VARIABLES.h"
 
 #include "DriverFsm/incfiles.h"
 
@@ -88,7 +88,7 @@ SysFSM _tivaFSM(&_tivaCmds, 1);
 
 std::string _port_name;
 
-beginner_tutorials::TOPIC_STATUS _statusMsg;
+tm_cab::TOPIC_STATUS _statusMsg;
 
 ros::Publisher _statusPublisher;
 ros::Publisher _varPublisher;
@@ -114,14 +114,14 @@ enum SchemeVector {
 
 StateVector _oldState;
 
-beginner_tutorials::TOPIC_STATUS::_status_type _oldStatus;
+tm_cab::TOPIC_STATUS::_status_type _oldStatus;
 
 void UpdatePubState(void) {
 
 	switch (_tivaFSM.getState()) {
 	case OUT_OF_SYNCH:
 
-		_statusMsg.status = beginner_tutorials::TOPIC_STATUS::S_OUT_OF_SYNCH;
+		_statusMsg.status = tm_cab::TOPIC_STATUS::S_OUT_OF_SYNCH;
 
 		ROS_INFO("%s status: Out of synch", _jointName.data());
 
@@ -132,41 +132,41 @@ void UpdatePubState(void) {
 		break;
 	case IDLE:
 
-		_statusMsg.status = beginner_tutorials::TOPIC_STATUS::S_IDLE;
+		_statusMsg.status = tm_cab::TOPIC_STATUS::S_IDLE;
 
 		ROS_INFO("%s status: Idle", _jointName.data());
 
 		break;
 	case UNINDEXED:
 
-		_statusMsg.status = beginner_tutorials::TOPIC_STATUS::S_UNINDEXED;
+		_statusMsg.status = tm_cab::TOPIC_STATUS::S_UNINDEXED;
 
 		ROS_INFO("%s status: Unindexed", _jointName.data());
 
 		break;
 	case RUNNING:
 
-		_statusMsg.status = beginner_tutorials::TOPIC_STATUS::S_RUNNING;
+		_statusMsg.status = tm_cab::TOPIC_STATUS::S_RUNNING;
 
 		ROS_INFO("%s status: Running", _jointName.data());
 
 		break;
 	case MONITOR_BREAK:
 
-		_statusMsg.status = beginner_tutorials::TOPIC_STATUS::S_MONITOR_BREAK;
+		_statusMsg.status = tm_cab::TOPIC_STATUS::S_MONITOR_BREAK;
 
 		ROS_INFO("%s status: Monitor break", _jointName.data());
 		break;
 	case UNSAFE:
 
-		_statusMsg.status = beginner_tutorials::TOPIC_STATUS::S_UNSAFE;
+		_statusMsg.status = tm_cab::TOPIC_STATUS::S_UNSAFE;
 
 		switch (_tivaFSM.getSafeErrorId()) {
 
 		case CMDS_ERR_SAFE_POS:
 
 			_statusMsg.safeErrId =
-					beginner_tutorials::TOPIC_STATUS::ERR_SAFE_POS;
+					tm_cab::TOPIC_STATUS::ERR_SAFE_POS;
 
 			ROS_ERROR("%s : Position safe bounds breached", _jointName.data());
 
@@ -174,7 +174,7 @@ void UpdatePubState(void) {
 		case CMDS_ERR_SAFE_SPEED:
 
 			_statusMsg.safeErrId =
-					beginner_tutorials::TOPIC_STATUS::ERR_SAFE_SPEED;
+					tm_cab::TOPIC_STATUS::ERR_SAFE_SPEED;
 
 			ROS_ERROR("%s : Speed safe bounds breached", _jointName.data());
 
@@ -182,7 +182,7 @@ void UpdatePubState(void) {
 		case CMDS_ERR_SAFE_PWM:
 
 			_statusMsg.safeErrId =
-					beginner_tutorials::TOPIC_STATUS::ERR_SAFE_PWM;
+					tm_cab::TOPIC_STATUS::ERR_SAFE_PWM;
 
 			ROS_ERROR("%s : PWM safe bounds breached", _jointName.data());
 
@@ -190,7 +190,7 @@ void UpdatePubState(void) {
 		case CMDS_ERR_SAFE_CURR:
 
 			_statusMsg.safeErrId =
-					beginner_tutorials::TOPIC_STATUS::ERR_SAFE_CURR;
+					tm_cab::TOPIC_STATUS::ERR_SAFE_CURR;
 
 			ROS_ERROR("%s : Current safe bounds breached", _jointName.data());
 
@@ -198,7 +198,7 @@ void UpdatePubState(void) {
 		case CMDS_ERR_SAFE_CURR_E:
 
 			_statusMsg.safeErrId =
-					beginner_tutorials::TOPIC_STATUS::ERR_SAFE_CURR_E;
+					tm_cab::TOPIC_STATUS::ERR_SAFE_CURR_E;
 
 			ROS_ERROR("%s : Current error safe bounds breached",
 					_jointName.data());
@@ -207,7 +207,7 @@ void UpdatePubState(void) {
 		case CMDS_ERR_SAFE_SPEED_E:
 
 			_statusMsg.safeErrId =
-					beginner_tutorials::TOPIC_STATUS::ERR_SAFE_SPEED_E;
+					tm_cab::TOPIC_STATUS::ERR_SAFE_SPEED_E;
 
 			ROS_ERROR("%s : Speed error safe bounds breached",
 					_jointName.data());
@@ -216,7 +216,7 @@ void UpdatePubState(void) {
 		case CMDS_ERR_SAFE_POS_E:
 
 			_statusMsg.safeErrId =
-					beginner_tutorials::TOPIC_STATUS::ERR_SAFE_POS_E;
+					tm_cab::TOPIC_STATUS::ERR_SAFE_POS_E;
 
 			ROS_ERROR("%s : Position error safe bounds breached",
 					_jointName.data());
@@ -225,7 +225,7 @@ void UpdatePubState(void) {
 		case CMDS_ERR_SAFE_FORCE_E:
 
 			_statusMsg.safeErrId =
-					beginner_tutorials::TOPIC_STATUS::ERR_SAFE_FORCE_E;
+					tm_cab::TOPIC_STATUS::ERR_SAFE_FORCE_E;
 
 			ROS_ERROR("%s : Force error safe bounds breached",
 					_jointName.data());
@@ -234,7 +234,7 @@ void UpdatePubState(void) {
 		case CMDS_ERR_SAFE_FORCE:
 
 			_statusMsg.safeErrId =
-					beginner_tutorials::TOPIC_STATUS::ERR_SAFE_FORCE;
+					tm_cab::TOPIC_STATUS::ERR_SAFE_FORCE;
 
 			ROS_ERROR("%s : Force safe bounds breached", _jointName.data());
 
@@ -255,7 +255,7 @@ int32_t JointDriver_RunLoop(void) {
 
 	int32_t ret;
 
-	beginner_tutorials::TOPIC_VARIABLES varMsg;
+	tm_cab::TOPIC_VARIABLES varMsg;
 
 	ret = _tivaFSM.RunLoop();
 
@@ -331,7 +331,7 @@ bool TivaNode_AssertSet(unsigned char cmdId) {
 
 			_statusMsg.err = true;
 
-			_statusMsg.errId = beginner_tutorials::TOPIC_STATUS::ERR_SET_PAR;
+			_statusMsg.errId = tm_cab::TOPIC_STATUS::ERR_SET_PAR;
 
 			_statusPublisher.publish(_statusMsg);
 
@@ -358,7 +358,7 @@ bool TivaNode_AssertSet(unsigned char cmdId) {
 
 			_statusMsg.err = true;
 
-			_statusMsg.errId = beginner_tutorials::TOPIC_STATUS::ERR_BAD_CMD;
+			_statusMsg.errId = tm_cab::TOPIC_STATUS::ERR_BAD_CMD;
 
 			_statusPublisher.publish(_statusMsg);
 
@@ -371,7 +371,7 @@ bool TivaNode_AssertSet(unsigned char cmdId) {
 
 			_statusMsg.err = true;
 
-			_statusMsg.errId = beginner_tutorials::TOPIC_STATUS::ERR_SET_PAR;
+			_statusMsg.errId = tm_cab::TOPIC_STATUS::ERR_SET_PAR;
 
 			_statusPublisher.publish(_statusMsg);
 
@@ -395,7 +395,7 @@ bool TivaNode_AssertSet(unsigned char cmdId) {
 }
 bool StartCtl(void) {
 
-	_statusMsg.status = beginner_tutorials::TOPIC_STATUS::S_START_SCHEME;
+	_statusMsg.status = tm_cab::TOPIC_STATUS::S_START_SCHEME;
 
 	_statusPublisher.publish(_statusMsg);
 
@@ -412,7 +412,7 @@ bool StartCtl(void) {
 
 bool StopCtl(void) {
 
-	_statusMsg.status = beginner_tutorials::TOPIC_STATUS::S_STOP_SCHEME;
+	_statusMsg.status = tm_cab::TOPIC_STATUS::S_STOP_SCHEME;
 
 	_statusPublisher.publish(_statusMsg);
 
@@ -440,7 +440,7 @@ bool TivaNode_UpdateSys(std_srvs::TriggerRequest &req,
 
 	if (TivaNode_AssertSet(CMDS_UPDATING)) {
 
-		std::string updateAppPath = ros::package::getPath("beginner_tutorials")
+		std::string updateAppPath = ros::package::getPath("tm_cab")
 				+ "/tiva_app/" + _jointName.data() + ".bin";
 
 		std::string updateCmd = "./sflash " + updateAppPath + " -p 0x2800 -c "
@@ -481,8 +481,8 @@ bool TivaNode_UpdateSys(std_srvs::TriggerRequest &req,
 
 }
 
-bool TivaNode_StartCtl(beginner_tutorials::START::Request &req,
-		beginner_tutorials::START::Response &res) {
+bool TivaNode_StartCtl(tm_cab::START::Request &req,
+		tm_cab::START::Response &res) {
 	if (_tivaFSM.getState() != IDLE && _tivaFSM.getState() != UNINDEXED) {
 
 		res.ack = false;
@@ -507,8 +507,8 @@ bool TivaNode_StartCtl(beginner_tutorials::START::Request &req,
 
 }
 
-bool TivaNode_StopCtl(beginner_tutorials::STOP::Request &req,
-		beginner_tutorials::STOP::Response &res) {
+bool TivaNode_StopCtl(tm_cab::STOP::Request &req,
+		tm_cab::STOP::Response &res) {
 	if (_tivaFSM.getState() != RUNNING) {
 
 		res.ack = false;
@@ -532,8 +532,8 @@ bool TivaNode_StopCtl(beginner_tutorials::STOP::Request &req,
 	return false;
 }
 
-bool TivaNode_Safe_State(beginner_tutorials::SAFE_STATE::Request &req,
-		beginner_tutorials::SAFE_STATE::Response &res) {
+bool TivaNode_Safe_State(tm_cab::SAFE_STATE::Request &req,
+		tm_cab::SAFE_STATE::Response &res) {
 	if (_tivaFSM.getState() != UNSAFE) {
 
 		res.ack = false;
@@ -560,8 +560,8 @@ bool TivaNode_Safe_State(beginner_tutorials::SAFE_STATE::Request &req,
 
 }
 
-bool TivaNode_SelectCtl(beginner_tutorials::SELECT_CTL::Request &req,
-		beginner_tutorials::SELECT_CTL::Response &res) {
+bool TivaNode_SelectCtl(tm_cab::SELECT_CTL::Request &req,
+		tm_cab::SELECT_CTL::Response &res) {
 	if (_tivaFSM.getState() != IDLE && _tivaFSM.getState() != UNINDEXED) {
 
 		res.ack = false;
@@ -569,41 +569,41 @@ bool TivaNode_SelectCtl(beginner_tutorials::SELECT_CTL::Request &req,
 		return false;
 	}
 
-	_statusMsg.status = beginner_tutorials::TOPIC_STATUS::S_SELECT_SCHEME;
+	_statusMsg.status = tm_cab::TOPIC_STATUS::S_SELECT_SCHEME;
 
 	_statusPublisher.publish(_statusMsg);
 
 	float ctlID;
 
 	switch (req.id) {
-	case beginner_tutorials::SELECT_CTL::Request::BREAK_CTL:
+	case tm_cab::SELECT_CTL::Request::BREAK_CTL:
 
 		_jntScheme = BREAK;
 
 		ctlID = CTL_ID_BREAK;
 		break;
 
-	case beginner_tutorials::SELECT_CTL::Request::POS_CTL:
+	case tm_cab::SELECT_CTL::Request::POS_CTL:
 
 		_jntScheme = POS;
 
 		ctlID = CTL_ID_POS;
 		break;
 
-	case beginner_tutorials::SELECT_CTL::Request::SPEED_CTL:
+	case tm_cab::SELECT_CTL::Request::SPEED_CTL:
 
 		_jntScheme = SPEED;
 
 		ctlID = CTL_ID_SPEED;
 		break;
 
-	case beginner_tutorials::SELECT_CTL::Request::FORCE_CTL:
+	case tm_cab::SELECT_CTL::Request::FORCE_CTL:
 
 		_jntScheme = FORCE;
 
 		ctlID = CTL_ID_FORCE;
 		break;
-	case beginner_tutorials::SELECT_CTL::Request::IDX_CTL:
+	case tm_cab::SELECT_CTL::Request::IDX_CTL:
 
 		_jntScheme = IDX;
 
@@ -626,8 +626,8 @@ bool TivaNode_SelectCtl(beginner_tutorials::SELECT_CTL::Request &req,
 	return false;
 }
 
-bool TivaNode_SetFS(beginner_tutorials::SET_SYS_FS::Request &req,
-		beginner_tutorials::SET_SYS_FS::Response &res) {
+bool TivaNode_SetFS(tm_cab::SET_SYS_FS::Request &req,
+		tm_cab::SET_SYS_FS::Response &res) {
 	if (_tivaFSM.getState() != IDLE && _tivaFSM.getState() != UNINDEXED) {
 
 		res.ack = false;
@@ -635,7 +635,7 @@ bool TivaNode_SetFS(beginner_tutorials::SET_SYS_FS::Request &req,
 		return false;
 	}
 
-	_statusMsg.status = beginner_tutorials::TOPIC_STATUS::S_SET_PAR;
+	_statusMsg.status = tm_cab::TOPIC_STATUS::S_SET_PAR;
 
 	_statusPublisher.publish(_statusMsg);
 
@@ -650,8 +650,8 @@ bool TivaNode_SetFS(beginner_tutorials::SET_SYS_FS::Request &req,
 	return true;
 }
 
-bool TivaNode_SetInterp(beginner_tutorials::SET_INTER::Request &req,
-		beginner_tutorials::SET_INTER::Response &res) {
+bool TivaNode_SetInterp(tm_cab::SET_INTER::Request &req,
+		tm_cab::SET_INTER::Response &res) {
 	if (_tivaFSM.getState() != IDLE && _tivaFSM.getState() != UNINDEXED) {
 
 		res.ack = false;
@@ -659,7 +659,7 @@ bool TivaNode_SetInterp(beginner_tutorials::SET_INTER::Request &req,
 		return false;
 	}
 
-	_statusMsg.status = beginner_tutorials::TOPIC_STATUS::S_SET_PAR;
+	_statusMsg.status = tm_cab::TOPIC_STATUS::S_SET_PAR;
 
 	_statusPublisher.publish(_statusMsg);
 
@@ -674,7 +674,7 @@ bool TivaNode_SetInterp(beginner_tutorials::SET_INTER::Request &req,
 	}
 
 	switch (req.id) {
-	case beginner_tutorials::SET_INTER::Request::FLIN:
+	case tm_cab::SET_INTER::Request::FLIN:
 
 		_tivaCmds.AddCmd(CMDM_SET_BREAK_INT_FUN, INT_FUN_LINEAR);
 
@@ -688,7 +688,7 @@ bool TivaNode_SetInterp(beginner_tutorials::SET_INTER::Request &req,
 
 		break;
 
-	case beginner_tutorials::SET_INTER::Request::FARC:
+	case tm_cab::SET_INTER::Request::FARC:
 
 		_tivaCmds.AddCmd(CMDM_SET_BREAK_INT_FUN, INT_FUN_ARCTG);
 
@@ -710,8 +710,8 @@ bool TivaNode_SetInterp(beginner_tutorials::SET_INTER::Request &req,
 	}
 }
 
-bool TivaNode_SetSafeSpeed(beginner_tutorials::SAFE_SPEED::Request &req,
-		beginner_tutorials::SAFE_SPEED::Response &res) {
+bool TivaNode_SetSafeSpeed(tm_cab::SAFE_SPEED::Request &req,
+		tm_cab::SAFE_SPEED::Response &res) {
 
 	if (_tivaFSM.getState() != IDLE && _tivaFSM.getState() != UNINDEXED) {
 
@@ -720,7 +720,7 @@ bool TivaNode_SetSafeSpeed(beginner_tutorials::SAFE_SPEED::Request &req,
 		return false;
 	}
 
-	_statusMsg.status = beginner_tutorials::TOPIC_STATUS::S_SET_PAR;
+	_statusMsg.status = tm_cab::TOPIC_STATUS::S_SET_PAR;
 
 	_statusPublisher.publish(_statusMsg);
 
@@ -756,8 +756,8 @@ bool TivaNode_SetSafeSpeed(beginner_tutorials::SAFE_SPEED::Request &req,
 
 }
 
-bool TivaNode_SetSafeSpeedE(beginner_tutorials::SAFE_SPEED::Request &req,
-		beginner_tutorials::SAFE_SPEED::Response &res) {
+bool TivaNode_SetSafeSpeedE(tm_cab::SAFE_SPEED::Request &req,
+		tm_cab::SAFE_SPEED::Response &res) {
 
 	if (_tivaFSM.getState() != IDLE && _tivaFSM.getState() != UNINDEXED) {
 
@@ -766,7 +766,7 @@ bool TivaNode_SetSafeSpeedE(beginner_tutorials::SAFE_SPEED::Request &req,
 		return false;
 	}
 
-	_statusMsg.status = beginner_tutorials::TOPIC_STATUS::S_SET_PAR;
+	_statusMsg.status = tm_cab::TOPIC_STATUS::S_SET_PAR;
 
 	_statusPublisher.publish(_statusMsg);
 
@@ -802,8 +802,8 @@ bool TivaNode_SetSafeSpeedE(beginner_tutorials::SAFE_SPEED::Request &req,
 
 }
 
-bool TivaNode_SetParPwm(beginner_tutorials::set_pwm_pars::Request &req,
-		beginner_tutorials::set_pwm_pars::Response &res) {
+bool TivaNode_SetParPwm(tm_cab::set_pwm_pars::Request &req,
+		tm_cab::set_pwm_pars::Response &res) {
 	if (_tivaFSM.getState() != IDLE && _tivaFSM.getState() != UNINDEXED) {
 
 		res.ack = false;
@@ -865,8 +865,8 @@ bool TivaNode_SetParPwm(beginner_tutorials::set_pwm_pars::Request &req,
 	return true;
 }
 
-bool TivaNode_SetParPID(beginner_tutorials::SET_PAR_PID::Request &req,
-		beginner_tutorials::SET_PAR_PID::Response &res) {
+bool TivaNode_SetParPID(tm_cab::SET_PAR_PID::Request &req,
+		tm_cab::SET_PAR_PID::Response &res) {
 	if (_tivaFSM.getState() != IDLE && _tivaFSM.getState() != UNINDEXED) {
 
 		res.ack = false;
@@ -874,7 +874,7 @@ bool TivaNode_SetParPID(beginner_tutorials::SET_PAR_PID::Request &req,
 		return false;
 	}
 
-	_statusMsg.status = beginner_tutorials::TOPIC_STATUS::S_SET_PAR;
+	_statusMsg.status = tm_cab::TOPIC_STATUS::S_SET_PAR;
 
 	_statusPublisher.publish(_statusMsg);
 
@@ -884,27 +884,27 @@ bool TivaNode_SetParPID(beginner_tutorials::SET_PAR_PID::Request &req,
 	float * selPar = NULL;
 
 	switch (req.pid_id) {
-	case beginner_tutorials::SET_PAR_PID::Request::POS_PID:
+	case tm_cab::SET_PAR_PID::Request::POS_PID:
 
 		selPID = &_posPID;
 
 		cmd = CMDM_POS_PARS_START;
 		break;
-	case beginner_tutorials::SET_PAR_PID::Request::SPEED_PID:
+	case tm_cab::SET_PAR_PID::Request::SPEED_PID:
 
 		selPID = &_speedPID;
 
 		cmd = CMDM_SPEED_PARS_START;
 		break;
-	case beginner_tutorials::SET_PAR_PID::Request::BREAK_PID:
+	case tm_cab::SET_PAR_PID::Request::BREAK_PID:
 
 		cmd = CMDM_BREAK_PARS_START;
 		break;
-	case beginner_tutorials::SET_PAR_PID::Request::FORCE_PID:
+	case tm_cab::SET_PAR_PID::Request::FORCE_PID:
 
 		cmd = CMDM_FORCE_PARS_START;
 		break;
-	case beginner_tutorials::SET_PAR_PID::Request::IDX_PID:
+	case tm_cab::SET_PAR_PID::Request::IDX_PID:
 
 		cmd = CMDM_IDX_PARS_START;
 		break;
@@ -915,31 +915,31 @@ bool TivaNode_SetParPID(beginner_tutorials::SET_PAR_PID::Request &req,
 	}
 
 	switch (req.par_id) {
-	case beginner_tutorials::SET_PAR_PID::Request::KP:
+	case tm_cab::SET_PAR_PID::Request::KP:
 
 		selPar = &selPID->kp;
 
 		cmd += KP_OFFSET;
 		break;
-	case beginner_tutorials::SET_PAR_PID::Request::KI:
+	case tm_cab::SET_PAR_PID::Request::KI:
 
 		selPar = &selPID->ki;
 
 		cmd += KI_OFFSET;
 		break;
-	case beginner_tutorials::SET_PAR_PID::Request::KD:
+	case tm_cab::SET_PAR_PID::Request::KD:
 
 		selPar = &selPID->kd;
 
 		cmd += KD_OFFSET;
 		break;
-	case beginner_tutorials::SET_PAR_PID::Request::ISAT:
+	case tm_cab::SET_PAR_PID::Request::ISAT:
 
 		selPar = &selPID->sat;
 
 		cmd += ISAT_OFFSET;
 		break;
-	case beginner_tutorials::SET_PAR_PID::Request::SAT:
+	case tm_cab::SET_PAR_PID::Request::SAT:
 
 		selPar = &selPID->isat;
 
@@ -969,11 +969,11 @@ bool setJointParameters(void) {
 
 	ros::NodeHandle nh;
 
-	beginner_tutorials::SELECT_CTL selSrv;
+	tm_cab::SELECT_CTL selSrv;
 
-	beginner_tutorials::SET_PAR_PID pidSrv;
+	tm_cab::SET_PAR_PID pidSrv;
 
-	beginner_tutorials::set_pwm_pars pwmSrv;
+	tm_cab::set_pwm_pars pwmSrv;
 
 	_tivaCmds.AddCmd(CMDM_SET_QEI_MAX_CNT, _qeiMaxCnt);
 
@@ -986,7 +986,7 @@ bool setJointParameters(void) {
 
 	ROS_DEBUG("%s QEI max count set to %f", _jointName.data(), _qeiMaxCnt);
 
-	selSrv.request.id = beginner_tutorials::SELECT_CTL::Request::SPEED_CTL;
+	selSrv.request.id = tm_cab::SELECT_CTL::Request::SPEED_CTL;
 
 	TivaNode_SelectCtl(selSrv.request, selSrv.response);
 	if (!selSrv.response.ack) {
@@ -1033,7 +1033,7 @@ bool setJointParameters(void) {
 
 	JointDriver_RunLoop();
 
-	selSrv.request.id = beginner_tutorials::SELECT_CTL::Request::POS_CTL;
+	selSrv.request.id = tm_cab::SELECT_CTL::Request::POS_CTL;
 
 	TivaNode_SelectCtl(selSrv.request, selSrv.response);
 	if (!selSrv.response.ack) {
@@ -1099,8 +1099,8 @@ bool setJointParameters(void) {
 	return true;
 }
 
-bool TivaNode_SetSafePWM(beginner_tutorials::SAFE_PWM::Request &req,
-		beginner_tutorials::SAFE_PWM::Response &res) {
+bool TivaNode_SetSafePWM(tm_cab::SAFE_PWM::Request &req,
+		tm_cab::SAFE_PWM::Response &res) {
 
 	if (_tivaFSM.getState() != IDLE && _tivaFSM.getState() != UNINDEXED) {
 
@@ -1109,7 +1109,7 @@ bool TivaNode_SetSafePWM(beginner_tutorials::SAFE_PWM::Request &req,
 		return false;
 	}
 
-	_statusMsg.status = beginner_tutorials::TOPIC_STATUS::S_SET_PAR;
+	_statusMsg.status = tm_cab::TOPIC_STATUS::S_SET_PAR;
 
 	_statusPublisher.publish(_statusMsg);
 
@@ -1142,8 +1142,8 @@ bool TivaNode_SetSafePWM(beginner_tutorials::SAFE_PWM::Request &req,
 	return true;
 }
 
-bool TivaNode_SetSafePos(beginner_tutorials::SAFE_POS::Request &req,
-		beginner_tutorials::SAFE_POS::Response &res) {
+bool TivaNode_SetSafePos(tm_cab::SAFE_POS::Request &req,
+		tm_cab::SAFE_POS::Response &res) {
 
 	if (_tivaFSM.getState() != IDLE && _tivaFSM.getState() != UNINDEXED) {
 
@@ -1152,7 +1152,7 @@ bool TivaNode_SetSafePos(beginner_tutorials::SAFE_POS::Request &req,
 		return false;
 	}
 
-	_statusMsg.status = beginner_tutorials::TOPIC_STATUS::S_SET_PAR;
+	_statusMsg.status = tm_cab::TOPIC_STATUS::S_SET_PAR;
 
 	_statusPublisher.publish(_statusMsg);
 
@@ -1186,8 +1186,8 @@ bool TivaNode_SetSafePos(beginner_tutorials::SAFE_POS::Request &req,
 
 }
 
-bool TivaNode_SetSafePosE(beginner_tutorials::SAFE_POS_E::Request &req,
-		beginner_tutorials::SAFE_POS_E::Response &res) {
+bool TivaNode_SetSafePosE(tm_cab::SAFE_POS_E::Request &req,
+		tm_cab::SAFE_POS_E::Response &res) {
 
 	if (_tivaFSM.getState() != IDLE && _tivaFSM.getState() != UNINDEXED) {
 
@@ -1196,7 +1196,7 @@ bool TivaNode_SetSafePosE(beginner_tutorials::SAFE_POS_E::Request &req,
 		return false;
 	}
 
-	_statusMsg.status = beginner_tutorials::TOPIC_STATUS::S_SET_PAR;
+	_statusMsg.status = tm_cab::TOPIC_STATUS::S_SET_PAR;
 
 	_statusPublisher.publish(_statusMsg);
 
@@ -1233,8 +1233,8 @@ bool TivaNode_SetSafePosE(beginner_tutorials::SAFE_POS_E::Request &req,
 
 }
 
-bool TivaNode_SetSafeCurr(beginner_tutorials::SAFE_CURR::Request &req,
-		beginner_tutorials::SAFE_CURR::Response &res) {
+bool TivaNode_SetSafeCurr(tm_cab::SAFE_CURR::Request &req,
+		tm_cab::SAFE_CURR::Response &res) {
 
 	if (_tivaFSM.getState() != IDLE && _tivaFSM.getState() != UNINDEXED) {
 
@@ -1243,7 +1243,7 @@ bool TivaNode_SetSafeCurr(beginner_tutorials::SAFE_CURR::Request &req,
 		return false;
 	}
 
-	_statusMsg.status = beginner_tutorials::TOPIC_STATUS::S_SET_PAR;
+	_statusMsg.status = tm_cab::TOPIC_STATUS::S_SET_PAR;
 
 	_statusPublisher.publish(_statusMsg);
 
@@ -1277,8 +1277,8 @@ bool TivaNode_SetSafeCurr(beginner_tutorials::SAFE_CURR::Request &req,
 
 }
 
-bool TivaNode_SetSafeForce(beginner_tutorials::SAFE_FORCE::Request &req,
-		beginner_tutorials::SAFE_FORCE::Response &res) {
+bool TivaNode_SetSafeForce(tm_cab::SAFE_FORCE::Request &req,
+		tm_cab::SAFE_FORCE::Response &res) {
 
 	if (_tivaFSM.getState() != IDLE && _tivaFSM.getState() != UNINDEXED) {
 
@@ -1287,7 +1287,7 @@ bool TivaNode_SetSafeForce(beginner_tutorials::SAFE_FORCE::Request &req,
 		return false;
 	}
 
-	_statusMsg.status = beginner_tutorials::TOPIC_STATUS::S_SET_PAR;
+	_statusMsg.status = tm_cab::TOPIC_STATUS::S_SET_PAR;
 
 	_statusPublisher.publish(_statusMsg);
 
@@ -1309,19 +1309,19 @@ bool TivaNode_SetSafeForce(beginner_tutorials::SAFE_FORCE::Request &req,
 
 }
 
-void TivaNode_JointSetPosRef(const beginner_tutorials::POS_REF & msg) {
+void TivaNode_JointSetPosRef(const tm_cab::POS_REF & msg) {
 //ROS_INFO("PosSet");
 
 	if (!_tivaFSM.isIndex())
 		_tivaCmds.AddCmd(REF_ID_POS_D, msg.q_D);
 }
 
-void TivaNode_JointSetGCompEffort(const beginner_tutorials::POS_REF & msg) {
+void TivaNode_JointSetGCompEffort(const tm_cab::POS_REF & msg) {
 
 //_tivaCmds.AddCmd(REF_ID_PWM_CMP, (float) (msg.q_D / _qKVT));
 }
 
-void TivaNode_JointSetSpeedRef(const beginner_tutorials::POS_REF & msg) {
+void TivaNode_JointSetSpeedRef(const tm_cab::POS_REF & msg) {
 
 //_tivaCmds.AddCmd(REF_ID_SPEED_D, (float) _qSign * msg.q_D);
 }
@@ -1626,17 +1626,17 @@ int main(int argc, char **argv) {
 
 	ros::Subscriber runSub = n.subscribe("sys_run", 1000, TivaNode_Run);
 
-	_varPublisher = n.advertise<beginner_tutorials::TOPIC_VARIABLES>(
+	_varPublisher = n.advertise<tm_cab::TOPIC_VARIABLES>(
 			_jointName + "_state_vars", 1000);
 
-	_statusPublisher = n.advertise<beginner_tutorials::TOPIC_STATUS>(
+	_statusPublisher = n.advertise<tm_cab::TOPIC_STATUS>(
 			_jointName + "_status", 1000);
 
 	ros::Rate loop_rate(100);
 
-	beginner_tutorials::TOPIC_VARIABLES varMsg;
+	tm_cab::TOPIC_VARIABLES varMsg;
 
-	_statusMsg.status = beginner_tutorials::TOPIC_STATUS::S_OUT_OF_SYNCH;
+	_statusMsg.status = tm_cab::TOPIC_STATUS::S_OUT_OF_SYNCH;
 	_statusMsg.safe = true;
 	_statusMsg.safeErrId = 0;
 	_statusMsg.err = false;

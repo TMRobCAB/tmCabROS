@@ -33,53 +33,53 @@
 #ifndef rqt_tm_operation__TmOperation_H
 #define rqt_tm_operation__TmOperation_H
 
-#include "beginner_tutorials/SAFE_CURR.h"
+#include "tm_cab/SAFE_CURR.h"
 
-#include "beginner_tutorials/SAFE_FORCE.h"
+#include "tm_cab/SAFE_FORCE.h"
 
-#include "beginner_tutorials/SAFE_POS.h"
+#include "tm_cab/SAFE_POS.h"
 
-#include "beginner_tutorials/SAFE_POS_E.h"
+#include "tm_cab/SAFE_POS_E.h"
 
-#include "beginner_tutorials/SAFE_PWM.h"
+#include "tm_cab/SAFE_PWM.h"
 
-#include "beginner_tutorials/SAFE_SPEED.h"
+#include "tm_cab/SAFE_SPEED.h"
 
-#include "beginner_tutorials/SELECT_CTL.h"
+#include "tm_cab/SELECT_CTL.h"
 
-#include "beginner_tutorials/SET_INTER.h"
+#include "tm_cab/SET_INTER.h"
 
-#include "beginner_tutorials/SAFE_STATE.h"
+#include "tm_cab/SAFE_STATE.h"
 
-#include "beginner_tutorials/SET_SYS_FS.h"
+#include "tm_cab/SET_SYS_FS.h"
 
-#include "beginner_tutorials/SET_PAR_PID.h"
+#include "tm_cab/SET_PAR_PID.h"
 
-#include "beginner_tutorials/POS_REF.h"
+#include "tm_cab/POS_REF.h"
 
-#include "beginner_tutorials/START.h"
+#include "tm_cab/START.h"
 
-#include "beginner_tutorials/STOP.h"
+#include "tm_cab/STOP.h"
 
-#include "beginner_tutorials/START_TM_CTL.h"
+#include "tm_cab/START_TM_CTL.h"
 
-#include "beginner_tutorials/STOP_TM_CTL.h"
+#include "tm_cab/STOP_TM_CTL.h"
 
-#include "beginner_tutorials/PTP_TM_CTL.h"
+#include "tm_cab/PTP_TM_CTL.h"
 
-#include "beginner_tutorials/set_par.h"
+#include "tm_cab/set_par.h"
 
-#include "beginner_tutorials/set_pwm_pars.h"
+#include "tm_cab/set_pwm_pars.h"
 
-#include "beginner_tutorials/jnt_traj.h"
+#include "tm_cab/jnt_traj.h"
 
-#include "beginner_tutorials/CTL_MODE.h"
+#include "tm_cab/CTL_MODE.h"
 
 #include <std_srvs/Trigger.h>
 
 #include <std_msgs/Bool.h>
 
-#include <beginner_tutorials/SYS_STATUS.h>
+#include <tm_cab/SYS_STATUS.h>
 
 #include <rqt_gui_cpp/plugin.h>
 
@@ -153,7 +153,7 @@ protected slots:
 
 	virtual void updateScaleK();
 
-	virtual void sysStatusUpdated(const beginner_tutorials::SYS_STATUS& msg);
+	virtual void sysStatusUpdated(const tm_cab::SYS_STATUS& msg);
 
 	virtual void toggleGComp ( int state );
 
@@ -163,11 +163,11 @@ protected slots:
 
 signals:
 
-	void processStatusUpdate(const beginner_tutorials::SYS_STATUS& msg);
+	void processStatusUpdate(const tm_cab::SYS_STATUS& msg);
 
 protected:
 
-	virtual void callbackSysStatus(const beginner_tutorials::SYS_STATUS& msg);
+	virtual void callbackSysStatus(const tm_cab::SYS_STATUS& msg);
 
 	Ui::TmOperationWidget ui_;
 
@@ -182,10 +182,10 @@ protected:
 private:
 
 	virtual void processSysStatus(QTextBrowser * sysText,
-			const beginner_tutorials::SYS_STATUS & sysStatus);
+			const tm_cab::SYS_STATUS & sysStatus);
 
 	virtual void processJointStatus(QTextBrowser * jointText,
-			const beginner_tutorials::SYS_STATUS::_j1_stat_type & jointStatus);
+			const tm_cab::SYS_STATUS::_j1_stat_type & jointStatus);
 
 	int jointIdxRunning_;
 
