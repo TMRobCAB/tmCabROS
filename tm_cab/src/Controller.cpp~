@@ -1178,8 +1178,6 @@ int main(int argc, char **argv) {
 
 				if (_idxSlave) {
 
-                    slavePosS.shutdown();
-
 					qFake = _qIdxS + (_qMeas - _qIdxM) * _scaleK;
 
 					fakeJntMsg.position = std::vector<double>(qFake.data(),

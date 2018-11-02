@@ -6,7 +6,7 @@
   <arg name="robot_description" default="robot_description"/>
 
   <!-- Load universal robot description format (URDF) -->
-  <param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="/home/l_vis/catkin_ws/URDFs/3dofTM.urdf"/>
+  <param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="/home/sheider/rosTm_ws/URDFs/3dofTM.urdf"/>
 
   <!-- The semantic description that corresponds to the URDF -->
   <param name="$(arg robot_description)_semantic" textfile="$(find 3dof_tm_moveit_config)/config/3dof_tm.srdf" />

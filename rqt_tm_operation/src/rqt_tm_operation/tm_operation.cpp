@@ -43,6 +43,8 @@ using namespace std;
 
 namespace rqt_tm_operation {
 
+double toDouble(std::string s);
+
 TmOperation::TmOperation() :
 		jntCtlSelected_(true), sysRunning_(false), jointIdxRunning_(0), rqt_gui_cpp::Plugin(), widget_(
 				0) {
@@ -236,9 +238,18 @@ void TmOperation::setSafety() {
 	const string maxVal(
 			ui_.safe_par_max_val_plainTextEdit->toPlainText().toStdString());
 
+//////////////////////////////////////////////////////////////////////////////////
+            //BORRAR !!!
+
+            //ROS_INFO("values Read - min: %f max: %f",toDouble(minVal),toDouble(maxVal));
+
+            //BORRAR !!!
+//////////////////////////////////////////////////////////////////////////////////
+
 	if (!isFloat(minVal) || !isFloat(minVal)) {
 
 		ROS_ERROR("Arguments must be floats");
+
 
 		return;
 	}
@@ -317,8 +328,8 @@ void TmOperation::setSafety() {
 			client = n.serviceClient<tm_cab::SAFE_POS>(
 					srvName.str());
 
-			srv.request.maxPos = atof(maxVal.data());
-			srv.request.minPos = atof(minVal.data());
+			srv.request.maxPos = toDouble(maxVal );
+			srv.request.minPos = toDouble(minVal );
 			if (client.call(srv)) {
 
 				if (srv.response.ack)
@@ -335,8 +346,8 @@ void TmOperation::setSafety() {
 			client = n.serviceClient<tm_cab::SAFE_POS_E>(
 					srvName.str());
 
-			srv.request.SPEM = atof(maxVal.data());
-			srv.request.SPEm = atof(minVal.data());
+			srv.request.SPEM = toDouble(maxVal );
+			srv.request.SPEm = toDouble(minVal );
 			if (client.call(srv)) {
 
 				if (srv.response.ack)
@@ -353,8 +364,8 @@ void TmOperation::setSafety() {
 			client = n.serviceClient<tm_cab::SAFE_SPEED>(
 					srvName.str());
 
-			srv.request.maxS = atof(maxVal.data());
-			srv.request.minS = atof(minVal.data());
+			srv.request.maxS = toDouble(maxVal );
+			srv.request.minS = toDouble(minVal );
 			if (client.call(srv)) {
 
 				if (srv.response.ack)
@@ -371,8 +382,8 @@ void TmOperation::setSafety() {
 			client = n.serviceClient<tm_cab::SAFE_SPEED>(
 					srvName.str());
 
-			srv.request.maxS = atof(maxVal.data());
-			srv.request.minS = atof(minVal.data());
+			srv.request.maxS = toDouble(maxVal );
+			srv.request.minS = toDouble(minVal );
 			if (client.call(srv)) {
 
 				if (srv.response.ack)
@@ -389,8 +400,9 @@ void TmOperation::setSafety() {
 			client = n.serviceClient<tm_cab::SAFE_PWM>(
 					srvName.str());
 
-			srv.request.maxP = atof(maxVal.data());
-			srv.request.minP = atof(minVal.data());
+			srv.request.maxP = toDouble(maxVal );
+			srv.request.minP = toDouble(minVal );
+
 			if (client.call(srv)) {
 
 				if (srv.response.ack)
@@ -407,8 +419,8 @@ void TmOperation::setSafety() {
 			client = n.serviceClient<tm_cab::SAFE_CURR>(
 					srvName.str());
 
-			srv.request.maxC = atof(maxVal.data());
-			srv.request.minC = atof(minVal.data());
+			srv.request.maxC = toDouble(maxVal );
+			srv.request.minC = toDouble(minVal );
 			if (client.call(srv)) {
 
 				if (srv.response.ack)
@@ -431,8 +443,8 @@ void TmOperation::setSafety() {
 			client = n.serviceClient<tm_cab::SAFE_FORCE>(
 					srvName.str());
 
-			srv.request.maxF = atof(maxVal.data());
-			srv.request.minF = atof(minVal.data());
+			srv.request.maxF = toDouble(maxVal );
+			srv.request.minF = toDouble(minVal );
 			if (client.call(srv)) {
 
 				if (srv.response.ack)
@@ -514,7 +526,7 @@ void TmOperation::setCtlPars() {
 				return;
 			}
 
-			fsSrv.request.sysFS = atof(parValue.data());
+			fsSrv.request.sysFS = toDouble(parValue );
 
 			if (client.call(fsSrv)) {
 
@@ -568,7 +580,7 @@ void TmOperation::setCtlPars() {
 				return;
 			}
 
-			interSrv.request.time_change = atof(parValue.data());
+			interSrv.request.time_change = toDouble(parValue );
 
 			if (ui_.int_fun_comboBox->currentText().contains("Linear"))
 				interSrv.request.id =
@@ -611,7 +623,7 @@ void TmOperation::setCtlPars() {
 					return;
 				}
 
-				pwmSrv.request.deadBandPos = atof(parValue.data());
+				pwmSrv.request.deadBandPos = toDouble(parValue );
 			}
 
 			if (ui_.db_neg_plainTextEdit->toPlainText().isEmpty()) {
@@ -627,7 +639,7 @@ void TmOperation::setCtlPars() {
 					return;
 				}
 
-				pwmSrv.request.deadBandNeg = atof(parValue.data());
+				pwmSrv.request.deadBandNeg = toDouble(parValue );
 			}
 
 			if (ui_.slope_pos_plainTextEdit->toPlainText().isEmpty()) {
@@ -643,7 +655,7 @@ void TmOperation::setCtlPars() {
 					return;
 				}
 
-				pwmSrv.request.slopePos = atof(parValue.data());
+				pwmSrv.request.slopePos = toDouble(parValue );
 			}
 
 			if (ui_.slope_neg_plainTextEdit->toPlainText().isEmpty()) {
@@ -659,7 +671,7 @@ void TmOperation::setCtlPars() {
 					return;
 				}
 
-				pwmSrv.request.slopeNeg = atof(parValue.data());
+				pwmSrv.request.slopeNeg = toDouble(parValue );
 			}
 
 			if (client.call(pwmSrv)) {
@@ -750,7 +762,7 @@ void TmOperation::setCtlPars() {
 
 				if (isFloat(parValue)) {
 
-					pidSrv.request.value = atof(parValue.data());
+					pidSrv.request.value = toDouble(parValue );
 
 					if (client.call(pidSrv)) {
 
@@ -781,7 +793,7 @@ void TmOperation::setCtlPars() {
 
 				if (isFloat(parValue)) {
 
-					pidSrv.request.value = atof(parValue.data());
+					pidSrv.request.value = toDouble(parValue );
 
 					if (client.call(pidSrv)) {
 
@@ -812,7 +824,7 @@ void TmOperation::setCtlPars() {
 
 				if (isFloat(parValue)) {
 
-					pidSrv.request.value = atof(parValue.data());
+					pidSrv.request.value = toDouble(parValue );
 
 					if (client.call(pidSrv)) {
 
@@ -843,7 +855,7 @@ void TmOperation::setCtlPars() {
 
 				if (isFloat(parValue)) {
 
-					pidSrv.request.value = atof(parValue.data());
+					pidSrv.request.value = toDouble(parValue );
 
 					if (client.call(pidSrv)) {
 
@@ -874,7 +886,7 @@ void TmOperation::setCtlPars() {
 
 				if (isFloat(parValue)) {
 
-					pidSrv.request.value = atof(parValue.data());
+					pidSrv.request.value = toDouble(parValue );
 
 					if (client.call(pidSrv)) {
 
@@ -1264,9 +1276,9 @@ void TmOperation::ptpExe() {
 	else if (ui_.ptp_mode_comboBox->currentText().contains("Joint"))
 		srv.request.mode = tm_cab::PTP_TM_CTL::Request::PTP_JNT;
 
-	srv.request.Xd = atof(xDes.data());
-	srv.request.Yd = atof(yDes.data());
-	srv.request.Zd = atof(zDes.data());
+	srv.request.Xd = toDouble(xDes );
+	srv.request.Yd = toDouble(yDes );
+	srv.request.Zd = toDouble(zDes );
 	if (client.call(srv)) {
 
 		if (srv.response.ack) {
@@ -1296,7 +1308,7 @@ void TmOperation::updateSensK() {
 
 	tm_cab::set_par srv;
 
-	srv.request.parVal = atof(fK.data());
+	srv.request.parVal = toDouble(fK );
 
 	if (client.call(srv)) {
 
@@ -1328,7 +1340,7 @@ void TmOperation::updateScaleK() {
 
 	tm_cab::set_par srv;
 
-	srv.request.parVal = atof(fK.data());
+	srv.request.parVal = toDouble(fK );
 
 	if (client.call(srv)) {
 
@@ -1440,15 +1452,15 @@ void TmOperation::jntTrajExe() {
 			return;
 		}
 
-		srv.request.nSteps = atof(nStepos.data());
+		srv.request.nSteps = toDouble(nStepos );
 
 	} else if (ui_.traj_var_comboBox->currentText().contains("PWM"))
 		srv.request.varId = tm_cab::jnt_traj::Request::PWM;
 
 	srv.request.jntNum = ui_.jnt_traj_comboBox->currentIndex() + 1;
-	srv.request.dPos = atof(dPos.data());
-	srv.request.duration = atof(duration.data());
-	srv.request.accT = atof(accT.data());
+	srv.request.dPos = toDouble(dPos );
+	srv.request.duration = toDouble(duration );
+	srv.request.accT = toDouble(accT );
 
 	ROS_INFO("Commanding Joint Trajectory");
 
@@ -1642,6 +1654,11 @@ bool isFloat(std::string myString) {
 	iss >> noskipws >> f; // noskipws considers leading whitespace invalid
 	// Check the entire string was consumed and if either failbit or badbit is set
 	return iss.eof() && !iss.fail();
+}
+
+double toDouble(std::string s){
+    std::replace(s.begin(), s.end(), '.', ',');
+    return std::atof(s.c_str());
 }
 
 }

@@ -43,8 +43,10 @@ using namespace std;
 
 namespace rqt_tm_operation {
 
+double toDouble(std::string s);
+
 TmOperation::TmOperation() :
-		sysRunning_(false), jointIdxRunning_(0), rqt_gui_cpp::Plugin(), widget_(
+		jntCtlSelected_(true), sysRunning_(false), jointIdxRunning_(0), rqt_gui_cpp::Plugin(), widget_(
 				0) {
 	setObjectName("TmOperation");
 }
@@ -129,16 +131,42 @@ void TmOperation::initPlugin(qt_gui_cpp::PluginContext& context) {
 	ui_.op_panel_stackedWidget->setCurrentIndex(
 			ui_.op_panel_stackedWidget->indexOf(ui_.ptp_page));
 
+	connect(ui_.g_comp_checkBox, SIGNAL(stateChanged (int)), this,
+			SLOT(toggleGComp (int)));
+
+	connect(ui_.idx_pose_checkBox, SIGNAL(stateChanged (int)), this,
+				SLOT(toggleIdxPose (int)));
+
 	connect(ui_.exe_ptp_pushButton, SIGNAL(clicked()), this, SLOT(ptpExe()));
+
+	connect(ui_.home_pushButton, SIGNAL(clicked()), this, SLOT(goHome()));
+
+	connect(ui_.exe_jnt_traj_pushButton, SIGNAL(clicked()), this,
+			SLOT(jntTrajExe()));
 
 	connect(ui_.update_sens_k_pushButton, SIGNAL(clicked()), this,
 			SLOT(updateSensK()));
+
+	connect(ui_.update_scale_k_pushButton, SIGNAL(clicked()), this,
+				SLOT(updateScaleK()));
+
+	connect(ui_.ptp_mode_comboBox, SIGNAL(activated (const QString &)), this,
+			SLOT(ptpModLabels(const QString &)));
+
+	connect(ui_.traj_var_comboBox, SIGNAL(activated (const QString &)), this,
+			SLOT(trajVarSelected(const QString &)));
+
+	ui_.traj_steps_label->setVisible(false);
+	ui_.traj_num_steps_plainTextEdit->setVisible(false);
+
 }
 
 void TmOperation::shutdownPlugin() {
 	sysStatS_.shutdown();
 
-	posResPub_.shutdown();
+	posRefPub_.shutdown();
+
+	setGCompPub_.shutdown();
 }
 
 void TmOperation::saveSettings(qt_gui_cpp::Settings& plugin_settings,
@@ -210,9 +238,18 @@ void TmOperation::setSafety() {
 	const string maxVal(
 			ui_.safe_par_max_val_plainTextEdit->toPlainText().toStdString());
 
+//////////////////////////////////////////////////////////////////////////////////
+            //BORRAR !!!
+
+            ROS_INFO("values Read - min: %f max: %f",toDouble(minVal),toDouble(maxVal));
+
+            //BORRAR !!!
+//////////////////////////////////////////////////////////////////////////////////
+
 	if (!isFloat(minVal) || !isFloat(minVal)) {
 
 		ROS_ERROR("Arguments must be floats");
+
 
 		return;
 	}
@@ -291,8 +328,8 @@ void TmOperation::setSafety() {
 			client = n.serviceClient<tm_cab::SAFE_POS>(
 					srvName.str());
 
-			srv.request.maxPos = atof(maxVal.data());
-			srv.request.minPos = atof(minVal.data());
+			srv.request.maxPos = toDouble(maxVal );
+			srv.request.minPos = toDouble(minVal );
 			if (client.call(srv)) {
 
 				if (srv.response.ack)
@@ -309,8 +346,8 @@ void TmOperation::setSafety() {
 			client = n.serviceClient<tm_cab::SAFE_POS_E>(
 					srvName.str());
 
-			srv.request.SPEM = atof(maxVal.data());
-			srv.request.SPEm = atof(minVal.data());
+			srv.request.SPEM = toDouble(maxVal );
+			srv.request.SPEm = toDouble(minVal );
 			if (client.call(srv)) {
 
 				if (srv.response.ack)
@@ -327,8 +364,8 @@ void TmOperation::setSafety() {
 			client = n.serviceClient<tm_cab::SAFE_SPEED>(
 					srvName.str());
 
-			srv.request.maxS = atof(maxVal.data());
-			srv.request.minS = atof(minVal.data());
+			srv.request.maxS = toDouble(maxVal );
+			srv.request.minS = toDouble(minVal );
 			if (client.call(srv)) {
 
 				if (srv.response.ack)
@@ -345,8 +382,8 @@ void TmOperation::setSafety() {
 			client = n.serviceClient<tm_cab::SAFE_SPEED>(
 					srvName.str());
 
-			srv.request.maxS = atof(maxVal.data());
-			srv.request.minS = atof(minVal.data());
+			srv.request.maxS = toDouble(maxVal );
+			srv.request.minS = toDouble(minVal );
 			if (client.call(srv)) {
 
 				if (srv.response.ack)
@@ -363,8 +400,9 @@ void TmOperation::setSafety() {
 			client = n.serviceClient<tm_cab::SAFE_PWM>(
 					srvName.str());
 
-			srv.request.maxP = atof(maxVal.data());
-			srv.request.minP = atof(minVal.data());
+			srv.request.maxP = toDouble(maxVal );
+			srv.request.minP = toDouble(minVal );
+
 			if (client.call(srv)) {
 
 				if (srv.response.ack)
@@ -381,8 +419,8 @@ void TmOperation::setSafety() {
 			client = n.serviceClient<tm_cab::SAFE_CURR>(
 					srvName.str());
 
-			srv.request.maxC = atof(maxVal.data());
-			srv.request.minC = atof(minVal.data());
+			srv.request.maxC = toDouble(maxVal );
+			srv.request.minC = toDouble(minVal );
 			if (client.call(srv)) {
 
 				if (srv.response.ack)
@@ -405,8 +443,8 @@ void TmOperation::setSafety() {
 			client = n.serviceClient<tm_cab::SAFE_FORCE>(
 					srvName.str());
 
-			srv.request.maxF = atof(maxVal.data());
-			srv.request.minF = atof(minVal.data());
+			srv.request.maxF = toDouble(maxVal );
+			srv.request.minF = toDouble(minVal );
 			if (client.call(srv)) {
 
 				if (srv.response.ack)
@@ -440,6 +478,11 @@ void TmOperation::ctlParSelected(const QString& parName) {
 
 		ui_.set_par_stackedWidget->setCurrentIndex(
 				ui_.set_par_stackedWidget->indexOf(ui_.fs_page));
+
+	else if (parName.contains("PWM"))
+
+		ui_.set_par_stackedWidget->setCurrentIndex(
+				ui_.set_par_stackedWidget->indexOf(ui_.pwm_pars_page));
 }
 
 void TmOperation::setCtlPars() {
@@ -453,6 +496,7 @@ void TmOperation::setCtlPars() {
 	tm_cab::SET_SYS_FS fsSrv;
 	tm_cab::SET_INTER interSrv;
 	tm_cab::SET_PAR_PID pidSrv;
+	tm_cab::set_pwm_pars pwmSrv;
 
 	string parValue;
 
@@ -464,6 +508,8 @@ void TmOperation::setCtlPars() {
 			continue;
 
 		srvName.str("");
+
+		//////////////////////////////////////////////////////////////////////////////////
 
 		if (ui_.ctl_pars_comboBox->currentText().contains("FS")) {
 
@@ -480,7 +526,7 @@ void TmOperation::setCtlPars() {
 				return;
 			}
 
-			fsSrv.request.sysFS = atof(parValue.data());
+			fsSrv.request.sysFS = toDouble(parValue );
 
 			if (client.call(fsSrv)) {
 
@@ -492,6 +538,8 @@ void TmOperation::setCtlPars() {
 			} else {
 				ROS_ERROR("Failed to call service %s", srvName.str().data());
 			}
+
+			//////////////////////////////////////////////////////////////////////////////////////////////
 
 		} else if (ui_.ctl_pars_comboBox->currentText().contains("Interp")) {
 
@@ -532,7 +580,7 @@ void TmOperation::setCtlPars() {
 				return;
 			}
 
-			interSrv.request.time_change = atof(parValue.data());
+			interSrv.request.time_change = toDouble(parValue );
 
 			if (ui_.int_fun_comboBox->currentText().contains("Linear"))
 				interSrv.request.id =
@@ -544,7 +592,7 @@ void TmOperation::setCtlPars() {
 
 			if (client.call(interSrv)) {
 
-				if (!fsSrv.response.ack)
+				if (!interSrv.response.ack)
 					ROS_INFO("joint %d Break interpolator configured", i);
 				else
 					ROS_INFO("Unable To configure joint %d interpolator ", i);
@@ -552,6 +600,92 @@ void TmOperation::setCtlPars() {
 			} else {
 				ROS_ERROR("Failed to call service %s", srvName.str().data());
 			}
+
+			///////////////////////////////////////////////////////////////////////////////////////////////
+
+		} else if (ui_.ctl_pars_comboBox->currentText().contains("PWM")) {
+
+			srvName << "/joint_" << i << "_set_PWM_pars";
+
+			client = n.serviceClient<tm_cab::set_pwm_pars>(
+					srvName.str());
+
+			if (ui_.db_pos_plainTextEdit->toPlainText().isEmpty()) {
+				pwmSrv.request.deadBandPos = 0.1;
+			} else {
+
+				parValue =
+						ui_.db_pos_plainTextEdit->toPlainText().toStdString();
+
+				if (!isFloat(parValue)) {
+
+					ROS_ERROR("Parameters must be float");
+					return;
+				}
+
+				pwmSrv.request.deadBandPos = toDouble(parValue );
+			}
+
+			if (ui_.db_neg_plainTextEdit->toPlainText().isEmpty()) {
+				pwmSrv.request.deadBandNeg = 0.1;
+			} else {
+
+				parValue =
+						ui_.db_neg_plainTextEdit->toPlainText().toStdString();
+
+				if (!isFloat(parValue)) {
+
+					ROS_ERROR("Parameters must be float");
+					return;
+				}
+
+				pwmSrv.request.deadBandNeg = toDouble(parValue );
+			}
+
+			if (ui_.slope_pos_plainTextEdit->toPlainText().isEmpty()) {
+				pwmSrv.request.slopePos = 1;
+			} else {
+
+				parValue =
+						ui_.slope_pos_plainTextEdit->toPlainText().toStdString();
+
+				if (!isFloat(parValue)) {
+
+					ROS_ERROR("Parameters must be float");
+					return;
+				}
+
+				pwmSrv.request.slopePos = toDouble(parValue );
+			}
+
+			if (ui_.slope_neg_plainTextEdit->toPlainText().isEmpty()) {
+				pwmSrv.request.slopeNeg = 1;
+			} else {
+
+				parValue =
+						ui_.slope_neg_plainTextEdit->toPlainText().toStdString();
+
+				if (!isFloat(parValue)) {
+
+					ROS_ERROR("Parameters must be float");
+					return;
+				}
+
+				pwmSrv.request.slopeNeg = toDouble(parValue );
+			}
+
+			if (client.call(pwmSrv)) {
+
+				if (pwmSrv.response.ack)
+					ROS_INFO("joint %d PWM Parameters set", i);
+				else
+					ROS_INFO("Unable To configure joint %d PWM Parameters ", i);
+
+			} else {
+				ROS_ERROR("Failed to call service %s", srvName.str().data());
+			}
+
+			/////////////////////////////////////////////////////////////////////////////////////////////////
 
 		} else if (ui_.ctl_pars_comboBox->currentText().contains("PID")) {
 
@@ -628,7 +762,7 @@ void TmOperation::setCtlPars() {
 
 				if (isFloat(parValue)) {
 
-					pidSrv.request.value = atof(parValue.data());
+					pidSrv.request.value = toDouble(parValue );
 
 					if (client.call(pidSrv)) {
 
@@ -659,7 +793,7 @@ void TmOperation::setCtlPars() {
 
 				if (isFloat(parValue)) {
 
-					pidSrv.request.value = atof(parValue.data());
+					pidSrv.request.value = toDouble(parValue );
 
 					if (client.call(pidSrv)) {
 
@@ -690,7 +824,7 @@ void TmOperation::setCtlPars() {
 
 				if (isFloat(parValue)) {
 
-					pidSrv.request.value = atof(parValue.data());
+					pidSrv.request.value = toDouble(parValue );
 
 					if (client.call(pidSrv)) {
 
@@ -721,7 +855,7 @@ void TmOperation::setCtlPars() {
 
 				if (isFloat(parValue)) {
 
-					pidSrv.request.value = atof(parValue.data());
+					pidSrv.request.value = toDouble(parValue );
 
 					if (client.call(pidSrv)) {
 
@@ -752,7 +886,7 @@ void TmOperation::setCtlPars() {
 
 				if (isFloat(parValue)) {
 
-					pidSrv.request.value = atof(parValue.data());
+					pidSrv.request.value = toDouble(parValue );
 
 					if (client.call(pidSrv)) {
 
@@ -896,7 +1030,7 @@ void TmOperation::toggelIndexPosRef() {
 	pubName.clear();
 	pubName << "/joint_" << jointIdxRunning_ << "_pos_ref";
 
-	posResPub_ = n.advertise<tm_cab::POS_REF>(pubName.str(), 1000);
+	posRefPub_ = n.advertise<tm_cab::POS_REF>(pubName.str(), 1000);
 
 	tm_cab::POS_REF refMsg;
 
@@ -905,7 +1039,7 @@ void TmOperation::toggelIndexPosRef() {
 	else
 		refMsg.q_D = 0;
 
-	posResPub_.publish(refMsg);
+	posRefPub_.publish(refMsg);
 
 }
 
@@ -920,7 +1054,7 @@ void TmOperation::toggelIndexNegRef() {
 	pubName.clear();
 	pubName << "/joint_" << jointIdxRunning_ << "_pos_ref";
 
-	posResPub_ = n.advertise<tm_cab::POS_REF>(pubName.str(), 1000);
+	posRefPub_ = n.advertise<tm_cab::POS_REF>(pubName.str(), 1000);
 
 	tm_cab::POS_REF refMsg;
 
@@ -929,7 +1063,7 @@ void TmOperation::toggelIndexNegRef() {
 	else
 		refMsg.q_D = 0;
 
-	posResPub_.publish(refMsg);
+	posRefPub_.publish(refMsg);
 }
 
 void TmOperation::toggelOperation() {
@@ -949,6 +1083,11 @@ void TmOperation::toggelOperation() {
 			return;
 		}
 
+		selOpMode();
+
+		if (!jntCtlSelected_)
+			return;
+
 		srvName << "/start_ctl";
 
 		client = n.serviceClient<tm_cab::START_TM_CTL>(
@@ -961,6 +1100,8 @@ void TmOperation::toggelOperation() {
 			if (startSrv.response.ack) {
 				ROS_INFO("Sys started");
 				ui_.start_op_pushButton->setText("Stop Operation");
+				ui_.sel_op_mode_pushButton->setEnabled(false);
+				ui_.g_comp_checkBox->setEnabled(false);
 			}
 		} else {
 
@@ -978,15 +1119,17 @@ void TmOperation::toggelOperation() {
 
 		if (client.call(stopSrv)) {
 
-			if (stopSrv.response.ack)
+			if (stopSrv.response.ack) {
 				ROS_INFO("Sys Stopped");
-
+			}
 		} else {
 
 			ROS_ERROR("Failed to call service %s", srvName.str().data());
 
 		}
 
+		ui_.sel_op_mode_pushButton->setEnabled(true);
+		ui_.g_comp_checkBox->setEnabled(true);
 		ui_.start_op_pushButton->setText("Start Operation");
 	}
 
@@ -995,8 +1138,10 @@ void TmOperation::toggelOperation() {
 void TmOperation::selOpMode() {
 
 	ros::NodeHandle n = getNodeHandle();
-	ros::ServiceClient client = n.serviceClient<tm_cab::CTL_MODE>(
-			"tm_ctl_set_mode");
+
+	tm_cab::SELECT_CTL selSrv;
+
+	ros::ServiceClient client;
 
 	QWidget * opModeWidget;
 
@@ -1004,18 +1149,56 @@ void TmOperation::selOpMode() {
 
 	if (ui_.op_mode_comboBox->currentText().contains("PTP")) {
 
+		selSrv.request.id = tm_cab::SELECT_CTL::Request::POS_CTL;
+
 		srv.request.mode = tm_cab::CTL_MODE::Request::PTP;
 
 		opModeWidget = ui_.ptp_page;
-	}
+	} else if (ui_.op_mode_comboBox->currentText().contains("Force - Pos")) {
 
-	if (ui_.op_mode_comboBox->currentText().contains("Force - Pos")) {
+		selSrv.request.id = tm_cab::SELECT_CTL::Request::POS_CTL;
 
 		srv.request.mode = tm_cab::CTL_MODE::Request::FORCE_POS;
 		srv.request.force_k = 0.1;
 
 		opModeWidget = ui_.f_pos_page;
+	} else if (ui_.op_mode_comboBox->currentText().contains("Joint Traj")) {
+
+		selSrv.request.id = tm_cab::SELECT_CTL::Request::SPEED_CTL;
+
+		opModeWidget = ui_.jnt_traj_page;
 	}
+
+	stringstream srvName;
+
+	for (int i = 1; i < 4; ++i) {
+
+		srvName.str("");
+
+		srvName << "/joint_" << i << "_select_Ctl";
+
+		client = n.serviceClient<tm_cab::SELECT_CTL>(srvName.str());
+
+		if (client.call(selSrv)) {
+
+			if (!selSrv.response.ack) {
+				ROS_ERROR("Unable to  select Joint %d scheme", i);
+
+				continue;
+			}
+		} else {
+
+			ROS_ERROR("Failed to call service %s", srvName.str().data());
+
+			jntCtlSelected_ = false;
+
+			return;
+		}
+	}
+
+	jntCtlSelected_ = true;
+
+	client = n.serviceClient<tm_cab::CTL_MODE>("/tm_ctl_set_mode");
 
 	if (client.call(srv)) {
 
@@ -1026,49 +1209,149 @@ void TmOperation::selOpMode() {
 		}
 	} else {
 
-		ROS_ERROR("Failed to set controller mode");
+		ROS_ERROR("Failed to call tm_ctl_set_mode");
+	}
+}
 
+void TmOperation::ptpModLabels(const QString & ptpMode) {
+
+	if (ptpMode.contains("Cart")) {
+		ui_.ptp_par1_label->setText("X des");
+		ui_.ptp_par2_label->setText("Y des");
+		ui_.ptp_par3_label->setText("Z des");
+	} else if (ptpMode.contains("Joint")) {
+		ui_.ptp_par1_label->setText("q1 des");
+		ui_.ptp_par2_label->setText("q2 des");
+		ui_.ptp_par3_label->setText("q3 des");
+	}
+
+}
+
+void TmOperation::goHome() {
+
+	ros::NodeHandle n = getNodeHandle();
+	ros::ServiceClient client = n.serviceClient<tm_cab::PTP_TM_CTL>(
+			"/tm_ptp");
+
+	tm_cab::PTP_TM_CTL srv;
+
+	srv.request.mode = tm_cab::PTP_TM_CTL::Request::PTP_JNT;
+
+	srv.request.Xd = 0;
+	srv.request.Yd = 1.57;
+	srv.request.Zd = 0;
+	if (client.call(srv)) {
+
+		if (srv.response.ack) {
+			ROS_INFO("PTP set");
+		}
+
+	} else {
+
+		ROS_ERROR("Failed to call");
 	}
 }
 
 void TmOperation::ptpExe() {
 
-	std::string xDes = ui_.xdes_lineEdit->text().toStdString();
-	std::string yDes = ui_.ydes_lineEdit->text().toStdString();
-	std::string zDes = ui_.zdes_lineEdit->text().toStdString();
+	std::string xDes = ui_.x_des_plainTextEdit->toPlainText().toStdString();
+	std::string yDes = ui_.y_des_plainTextEdit->toPlainText().toStdString();
+	std::string zDes = ui_.z_des_plainTextEdit->toPlainText().toStdString();
 
-	if (!isFloat(xDes) || !isFloat(yDes)
-				|| !isFloat(zDes)) {
+	if (!isFloat(xDes) || !isFloat(yDes) || !isFloat(zDes)) {
 
-			ROS_ERROR("Arguments must be floats");
+		ROS_ERROR("Arguments must be floats");
 
-			return;
+		return;
+	}
+
+	ros::NodeHandle n = getNodeHandle();
+	ros::ServiceClient client = n.serviceClient<tm_cab::PTP_TM_CTL>(
+			"/tm_ptp");
+
+	tm_cab::PTP_TM_CTL srv;
+
+	if (ui_.ptp_mode_comboBox->currentText().contains("Cart"))
+		srv.request.mode = tm_cab::PTP_TM_CTL::Request::PTP_CART;
+	else if (ui_.ptp_mode_comboBox->currentText().contains("Joint"))
+		srv.request.mode = tm_cab::PTP_TM_CTL::Request::PTP_JNT;
+
+	srv.request.Xd = toDouble(xDes );
+	srv.request.Yd = toDouble(yDes );
+	srv.request.Zd = toDouble(zDes );
+	if (client.call(srv)) {
+
+		if (srv.response.ack) {
+			ROS_INFO("PTP set");
 		}
 
-		ros::NodeHandle n = getNodeHandle();
-		ros::ServiceClient client = n.serviceClient<tm_cab::PTP_TM_CTL>(
-				"tm_ptp");
+	} else {
 
-		tm_cab::PTP_TM_CTL srv;
-
-		srv.request.Xd = atof(xDes.data());
-		srv.request.Yd = atof(yDes.data());
-		srv.request.Zd = atof(zDes.data());
-		if (client.call(srv)) {
-
-			if (srv.response.ack) {
-				ROS_INFO("PTP set");
-			}
-
-		} else {
-
-			ROS_ERROR(
-					"Failed to command PTP. Sys not running or point not reachable");
-		}
+		ROS_ERROR("Failed to call");
+	}
 }
 
 void TmOperation::updateSensK() {
 
+	std::string fK = ui_.sens_k_plainTextEdit->toPlainText().toStdString();
+
+	if (!isFloat(fK)) {
+
+		ROS_ERROR("Argument must be floats service /tm_ptp");
+
+		return;
+	}
+
+	ros::NodeHandle n = getNodeHandle();
+	ros::ServiceClient client = n.serviceClient<tm_cab::set_par>(
+			"/tm_set_f_pos_kp");
+
+	tm_cab::set_par srv;
+
+	srv.request.parVal = toDouble(fK );
+
+	if (client.call(srv)) {
+
+		if (srv.response.ack) {
+			ROS_INFO("F - Pos Sensibility set");
+		}
+
+	} else {
+
+		ROS_ERROR("Failed to call F - Pos Sensibility Set service");
+	}
+
+}
+
+void TmOperation::updateScaleK() {
+
+	std::string fK = ui_.scale_k_plainTextEdit->toPlainText().toStdString();
+
+	if (!isFloat(fK)) {
+
+		ROS_ERROR("Argument must be floats service /tm_ptp");
+
+		return;
+	}
+
+	ros::NodeHandle n = getNodeHandle();
+	ros::ServiceClient client = n.serviceClient<tm_cab::set_par>(
+			"/tm_set_scaling_k");
+
+	tm_cab::set_par srv;
+
+	srv.request.parVal = toDouble(fK );
+
+	if (client.call(srv)) {
+
+		if (srv.response.ack) {
+			ROS_INFO("Scale set");
+		}
+
+	} else {
+
+		ROS_ERROR("Failed to call scale Set service");
+	}
 
 }
 
@@ -1081,15 +1364,24 @@ void TmOperation::sysStatusUpdated(const tm_cab::SYS_STATUS& msg) {
 
 	processSysStatus(ui_.sys_status_textBrowser, msg);
 
+	ui_.sys_status_op_textBrowser->setText(
+			ui_.sys_status_textBrowser->toPlainText());
+	ui_.sys_status_op_textBrowser->setTextColor(
+			ui_.sys_status_textBrowser->textColor());
+
+	processJointStatus(ui_.j1_stat_textBrowser, msg.j1_stat);
+	processJointStatus(ui_.j2_stat_textBrowser, msg.j2_stat);
+	processJointStatus(ui_.j3_stat_textBrowser, msg.j3_stat);
+
 	if (!sysRunning_
 			&& msg.sys_status == tm_cab::SYS_STATUS::RUNNING)
 		sysRunning_ = true;
 
-	if (msg.sys_status != tm_cab::SYS_STATUS::RUNNING
-			&& sysRunning_) {
+	if (sysRunning_
+			&& msg.sys_status != tm_cab::SYS_STATUS::RUNNING) {
 
-		sysRunning_ = false;
 		toggelOperation();
+		sysRunning_ = false;
 	}
 
 	switch (jointIdxRunning_) {
@@ -1113,6 +1405,133 @@ void TmOperation::sysStatusUpdated(const tm_cab::SYS_STATUS& msg) {
 		break;
 	default:
 		break;
+	}
+}
+
+void TmOperation::jntTrajExe() {
+
+	std::string dPos = ui_.traj_dpos_plainTextEdit->toPlainText().toStdString();
+	std::string duration =
+			ui_.traj_dur_plainTextEdit->toPlainText().toStdString();
+	std::string accT = ui_.traj_acct_plainTextEdit->toPlainText().toStdString();
+
+	std::string nStepos =
+			ui_.traj_num_steps_plainTextEdit->toPlainText().toStdString();
+
+	if (!isFloat(dPos) || !isFloat(duration) || !isFloat(accT)) {
+
+		ROS_ERROR("Arguments must be floats");
+
+		return;
+	}
+
+	ros::NodeHandle n = getNodeHandle();
+	ros::ServiceClient client = n.serviceClient<tm_cab::jnt_traj>(
+			"/exe_jnt_traj");
+
+	tm_cab::jnt_traj srv;
+
+	srv.request.nSteps = 1;
+
+	if (ui_.traj_int_type_comboBox->currentText().contains("Tg"))
+		srv.request.intType = tm_cab::jnt_traj::Request::ARC_TG;
+
+	else if (ui_.traj_int_type_comboBox->currentText().contains("Linear"))
+		srv.request.intType = tm_cab::jnt_traj::Request::LIN;
+
+	if (ui_.traj_var_comboBox->currentText().contains("Speed"))
+		srv.request.varId = tm_cab::jnt_traj::Request::SPEED;
+
+	else if (ui_.traj_var_comboBox->currentText().contains("PWM Steps")) {
+		srv.request.varId = tm_cab::jnt_traj::Request::PWM;
+
+		if (!isFloat(dPos) || nStepos.empty()) {
+
+			ROS_ERROR("Arguments must be floats");
+
+			return;
+		}
+
+		srv.request.nSteps = toDouble(nStepos );
+
+	} else if (ui_.traj_var_comboBox->currentText().contains("PWM"))
+		srv.request.varId = tm_cab::jnt_traj::Request::PWM;
+
+	srv.request.jntNum = ui_.jnt_traj_comboBox->currentIndex() + 1;
+	srv.request.dPos = toDouble(dPos );
+	srv.request.duration = toDouble(duration );
+	srv.request.accT = toDouble(accT );
+
+	ROS_INFO("Commanding Joint Trajectory");
+
+	if (client.call(srv)) {
+
+		if (srv.response.ack) {
+			ROS_INFO("Joint Trajectory complete");
+		}
+
+	} else {
+
+		ROS_ERROR("Failed to command Joint Trajectory");
+	}
+}
+
+void TmOperation::toggleGComp(int state) {
+
+	ros::NodeHandle n = getNodeHandle();
+
+	setGCompPub_ = n.advertise<std_msgs::Bool>("/set_g_comp", 100);
+
+	std_msgs::Bool msg;
+
+	if (ui_.g_comp_checkBox->isChecked())
+		msg.data = true;
+	else
+		msg.data = false;
+
+	setGCompPub_.publish(msg);
+}
+
+void TmOperation::toggleIdxPose(int state) {
+
+	ros::NodeHandle n = getNodeHandle();
+
+	setGCompPub_ = n.advertise<std_msgs::Bool>("/index_pose", 100);
+
+	std_msgs::Bool msg;
+
+	if (ui_.idx_pose_checkBox->isChecked())
+		msg.data = true;
+	else
+		msg.data = false;
+
+	setGCompPub_.publish(msg);
+}
+
+void TmOperation::trajVarSelected(const QString& varName) {
+
+	ui_.traj_steps_label->setVisible(false);
+	ui_.traj_num_steps_plainTextEdit->setVisible(false);
+
+	ui_.traj_dur_label->setText("Duration [s]");
+
+	if (varName.contains("Speed")) {
+
+		ui_.traj_delta_label->setText("delta Pos [rad]");
+
+	} else if (varName.contains("PWM Steps")) {
+
+		ui_.traj_delta_label->setText("delta Pos [rad]");
+		ui_.traj_dur_label->setText("PWM max [Nm]");
+		ui_.traj_num_steps_plainTextEdit->setEnabled(true);
+
+		ui_.traj_steps_label->setVisible(true);
+		ui_.traj_num_steps_plainTextEdit->setVisible(true);
+	} else if (varName.contains("PWM")) {
+
+		ui_.traj_delta_label->setText("Tmax [Nm]");
+		ui_.traj_num_steps_plainTextEdit->setEnabled(false);
+
 	}
 }
 
@@ -1183,10 +1602,6 @@ void TmOperation::processJointStatus(QTextBrowser * jointText,
 void TmOperation::processSysStatus(QTextBrowser * sysText,
 		const tm_cab::SYS_STATUS & sysStatus) {
 
-	processJointStatus(ui_.j1_stat_textBrowser, sysStatus.j1_stat);
-	processJointStatus(ui_.j2_stat_textBrowser, sysStatus.j2_stat);
-	processJointStatus(ui_.j3_stat_textBrowser, sysStatus.j3_stat);
-
 	QColor redC(255, 0, 0);
 	QColor greenC(0, 255, 0);
 	QColor blueC(0, 0, 255);
@@ -1239,6 +1654,11 @@ bool isFloat(std::string myString) {
 	iss >> noskipws >> f; // noskipws considers leading whitespace invalid
 	// Check the entire string was consumed and if either failbit or badbit is set
 	return iss.eof() && !iss.fail();
+}
+
+double toDouble(std::string s){
+    std::replace(s.begin(), s.end(), '.', ',');
+    return std::atof(s.c_str());
 }
 
 }
