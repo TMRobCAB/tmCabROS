@@ -90,7 +90,7 @@
           pkg="tm_cab" type="joint_driver" output="screen" respawn="true">
 
       <param name=  "port_name" type="string" value="/dev/ttyS3" />
-      <param name=  "q_offset" type="double" value="-0.08" /> <!--0.05-->
+      <param name=  "q_offset" type="double" value="-0.3" /> <!--0.05-->
       <param name=  "q_sign" type="int" value="-1" />
       <param name=  "qei_max_cnt" type="double" value="10000" />
     

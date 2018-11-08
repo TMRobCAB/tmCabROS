@@ -241,7 +241,7 @@ void TmOperation::setSafety() {
 //////////////////////////////////////////////////////////////////////////////////
             //BORRAR !!!
 
-            ROS_INFO("values Read - min: %f max: %f",toDouble(minVal),toDouble(maxVal));
+            //ROS_INFO("values Read - min: %f max: %f",toDouble(minVal),toDouble(maxVal));
 
             //BORRAR !!!
 //////////////////////////////////////////////////////////////////////////////////
@@ -1657,7 +1657,7 @@ bool isFloat(std::string myString) {
 }
 
 double toDouble(std::string s){
-    std::replace(s.begin(), s.end(), '.', ',');
+    std::replace(s.begin(), s.end(), '.', '.');
     return std::atof(s.c_str());
 }
 

@@ -1656,8 +1656,9 @@ bool isFloat(std::string myString) {
 	return iss.eof() && !iss.fail();
 }
 
+
 double toDouble(std::string s){
-    std::replace(s.begin(), s.end(), '.', ',');
+    std::replace(s.begin(), s.end(), '.', '.');
     return std::atof(s.c_str());
 }
 
